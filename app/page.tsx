@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 
 const HomePage = () => {
@@ -8,6 +9,8 @@ const HomePage = () => {
       <Button variant="default" size="lg">
         Click me
       </Button>
+
+      <ModeToggle />
     </main>
   );
 };
