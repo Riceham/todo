@@ -1,27 +1,16 @@
 "use client";
 
-import {
-  ChevronsLeft,
-  Menu,
-  Plus,
-  PlusCircle,
-  Search,
-  Settings,
-  Trash,
-} from "lucide-react";
+import { ChevronsLeft, Menu, Plus, Settings, Share } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type ElementRef, useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+import { Logo } from "@/components/logo";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-// import { DocumentList } from "./document-list";
-import { Item } from "./item";
+import { WorkspaceList } from "./workspace-list";
+import { Button } from "@/components/ui/button";
 
 export const Sidebar = () => {
   const pathname = usePathname();
@@ -109,7 +98,7 @@ export const Sidebar = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
+          "group/sidebar h-full bg-secondary/30 overflow-y-auto relative flex w-60 flex-col z-[99999]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-0"
         )}
@@ -124,28 +113,31 @@ export const Sidebar = () => {
           <ChevronsLeft className="h-6 w-6" />
         </button>
 
-        <div className="h-full flex flex-col justify-between">
-          <div>
-            <Item label="Search" icon={Search} isSearch onClick={() => {}} />
-            <Item label="Settings" icon={Settings} onClick={() => {}} />
-            <Item onClick={() => {}} label="New page" icon={PlusCircle} />
-          </div>
-          <div className="mt-4">
-            {/* <DocumentList /> */}
-            <Item onClick={() => {}} icon={Plus} label="Add a page" />
+        <Logo />
+        <Separator />
 
-            <Popover>
-              <PopoverTrigger className="w-full mt-4" asChild>
-                <Item label="Trash" icon={Trash} />
-              </PopoverTrigger>
+        <div className="h-max overflow-hidden overflow-y-auto flex flex-col justify-between p-4 scrollbar">
+          <WorkspaceList n={50} />
+        </div>
 
-              <PopoverContent
-                side={isMobile ? "bottom" : "right"}
-                className="p-0 w-72"
-              >
-                Trash Box
-              </PopoverContent>
-            </Popover>
+        <div className="flex flex-col w-full items-center">
+          <Button className="w-3/4 m-2.5 max-w-sm">
+            <Plus className="w-5 h-5 mr-2" />
+            Add Workspace
+          </Button>
+
+          <Separator />
+
+          <div className="w-full flex items-center justify-center space-x-[15%]">
+            <Button size="icon" className="my-4">
+              <Settings className="h-6 w-6" />
+            </Button>
+
+            <Separator orientation="vertical" className="h-full" />
+
+            <Button size="icon" className="my-4">
+              <Share className="h-6 w-6" />
+            </Button>
           </div>
         </div>
 
