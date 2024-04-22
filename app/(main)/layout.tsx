@@ -6,8 +6,9 @@ import { Sidebar } from "./_components/sidebar";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="h-full flex dark:bg-[#1F1F1F]">
+    <div className="h-full flex dark:bg-[#0D171E]">
       <Sidebar />
+
       <main className="flex-1 h-full overflow-y-auto">
         {/* <SearchCommand /> */}
         <Header />
