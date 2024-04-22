@@ -6,14 +6,16 @@ import { type ElementRef, useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
 import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useSettings } from "@/hooks/use-settings";
 import { cn } from "@/lib/utils";
 
 import { WorkspaceList } from "./workspace-list";
-import { Button } from "@/components/ui/button";
 
 export const Sidebar = () => {
   const pathname = usePathname();
+  const settings = useSettings();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const isResizingRef = useRef(false);
@@ -98,7 +100,7 @@ export const Sidebar = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full bg-secondary/30 overflow-y-auto relative flex w-60 flex-col z-[99999]",
+          "group/sidebar h-full bg-secondary/30 overflow-y-auto relative flex w-60 flex-col z-10",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-0"
         )}
@@ -130,6 +132,7 @@ export const Sidebar = () => {
 
           <div className="w-full flex items-center justify-center space-x-[15%]">
             <Button
+              onClick={settings.onOpen}
               size="icon"
               className="my-4"
               aria-label="Settings"
