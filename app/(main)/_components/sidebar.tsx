@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { type ElementRef, useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
+import { Hint } from "@/components/hint";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -112,7 +113,14 @@ export const Sidebar = () => {
             isMobile && "opacity-100"
           )}
         >
-          <ChevronsLeft className="h-6 w-6" />
+          <Hint
+            description="Collapse Sidebar"
+            side="left"
+            sideOffset={5}
+            delayDuration={500}
+          >
+            <ChevronsLeft className="h-6 w-6" />
+          </Hint>
         </button>
 
         <Logo />
@@ -135,21 +143,19 @@ export const Sidebar = () => {
               onClick={settings.onOpen}
               size="icon"
               className="my-4"
-              aria-label="Settings"
-              title="Settings"
+              aria-label="My Settings"
             >
-              <Settings className="h-6 w-6" />
+              <Hint description="My Settings" sideOffset={12}>
+                <Settings className="h-6 w-6" />
+              </Hint>
             </Button>
 
             <Separator orientation="vertical" className="h-full" />
 
-            <Button
-              size="icon"
-              className="my-4"
-              aria-label="Share"
-              title="Share"
-            >
-              <Share className="h-6 w-6" />
+            <Button size="icon" className="my-4" aria-label="Share To-Do list">
+              <Hint description="Share To-Do list" sideOffset={12}>
+                <Share className="h-6 w-6" />
+              </Hint>
             </Button>
           </div>
         </div>
