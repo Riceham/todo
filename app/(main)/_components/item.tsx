@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ChevronRight,
-  type LucideIcon,
-  MoreHorizontal,
-  Trash,
-} from "lucide-react";
+import { ChevronRight, MoreHorizontal, Trash } from "lucide-react";
 import React from "react";
 
 import {
@@ -33,9 +28,12 @@ export const Item = ({ label, onClick, active }: ItemProps) => {
         active && "bg-primary/5 text-primary"
       )}
     >
-      <div className="h-full rounded-sm mr-1">
-        <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground/50" />
-      </div>
+      <ChevronRight
+        className={cn(
+          "h-5 w-5 shrink-0 text-muted-foreground/50 mr-1",
+          active && "text-primary"
+        )}
+      />
 
       <span className="truncate">{label}</span>
 
@@ -44,7 +42,10 @@ export const Item = ({ label, onClick, active }: ItemProps) => {
           <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
             <div
               role="button"
-              className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-md p-0.5 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              className={cn(
+                "opacity-0 group-hover:opacity-100 h-full ml-auto rounded-md p-0.5 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-600",
+                active && "opacity-80"
+              )}
             >
               <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
             </div>

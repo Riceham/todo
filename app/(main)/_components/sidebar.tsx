@@ -129,13 +129,23 @@ export const Sidebar = () => {
           <Separator />
 
           <div className="w-full flex items-center justify-center space-x-[15%]">
-            <Button size="icon" className="my-4">
+            <Button
+              size="icon"
+              className="my-4"
+              aria-label="Settings"
+              title="Settings"
+            >
               <Settings className="h-6 w-6" />
             </Button>
 
             <Separator orientation="vertical" className="h-full" />
 
-            <Button size="icon" className="my-4">
+            <Button
+              size="icon"
+              className="my-4"
+              aria-label="Share"
+              title="Share"
+            >
               <Share className="h-6 w-6" />
             </Button>
           </div>
