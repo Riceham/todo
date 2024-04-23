@@ -3,12 +3,15 @@
 import { SearchIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useSearch } from "@/hooks/use-search";
 
 export const Search = () => {
+  const { onOpen } = useSearch();
   return (
     <Button
       variant="outline"
       className="w-1/4 dark:hover:bg-foreground/10 cursor-text"
+      onClick={onOpen}
       asChild
     >
       <div className="flex justify-between">

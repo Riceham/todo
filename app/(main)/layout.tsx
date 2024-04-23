@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "react";
 
-// import { SearchCommand } from "./_components/search-command";
+import { SearchCommand } from "./_components/search-command";
 import { Navigation } from "./_components/navigation";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
@@ -9,7 +9,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
       <Navigation />
 
       <main className="relative flex-1 h-full overflow-y-auto">
-        {/* <SearchCommand /> */}
+        <SearchCommand />
         {children}
       </main>
     </div>
