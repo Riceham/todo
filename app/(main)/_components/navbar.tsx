@@ -3,6 +3,8 @@
 import { Menu } from "lucide-react";
 import { useParams } from "next/navigation";
 
+import { WORKSPACES } from "@/constants";
+
 import { Search } from "./search";
 import { Title } from "./title";
 import { UserAvatar } from "./user-avatar";
@@ -25,7 +27,13 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
       <div className="flex items-center justify-between w-full">
         <div>
           {params.workspaceId ? (
-            <Title id={params.workspaceId as string} name={"Workspace 10"} />
+            <Title
+              id={params.workspaceId as string}
+              name={
+                WORKSPACES.find(({ id }) => params.workspaceId === id)?.name ||
+                "Untitled"
+              }
+            />
           ) : null}
         </div>
         <Search />

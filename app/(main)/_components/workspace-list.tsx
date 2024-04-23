@@ -2,20 +2,22 @@
 
 import { useParams, useRouter } from "next/navigation";
 
+import { WORKSPACES } from "@/constants";
+
 import { Item } from "./item";
 
-export const WorkspaceList = ({ n }: { n: number }) => {
+export const WorkspaceList = () => {
   const router = useRouter();
   const params = useParams();
 
   return (
     <div>
-      {new Array(n).fill("").map((_, i) => (
+      {WORKSPACES.map(({ id, name }) => (
         <Item
-          active={params.workspaceId === String(i)}
-          key={i}
-          label={`Workspace ${i + 1}`}
-          onClick={() => router.push(`/dashboard/${i}`)}
+          active={params.workspaceId === id}
+          key={id}
+          label={name}
+          onClick={() => router.push(`/dashboard/${id}`)}
         />
       ))}
     </div>

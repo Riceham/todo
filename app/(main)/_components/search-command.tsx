@@ -1,7 +1,7 @@
 "use client";
 
 import { LayoutGrid } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
@@ -15,8 +15,10 @@ import {
 } from "@/components/ui/command";
 import { WORKSPACES } from "@/constants";
 import { useSearch } from "@/hooks/use-search";
+import { cn } from "@/lib/utils";
 
 export const SearchCommand = () => {
+  const params = useParams();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -61,11 +63,21 @@ export const SearchCommand = () => {
               value={workspace.name}
               title={workspace.name}
               onSelect={() => onSelect(workspace.id)}
-              className="dark:aria-selected:bg-foreground/10"
+              className={cn(
+                "dark:aria-selected:bg-foreground/10",
+                params.workspaceId === workspace.id &&
+                  "dark:bg-foreground/10 bg-muted"
+              )}
             >
-              <LayoutGrid className="mr-2 h-4 w-4" />
+              <LayoutGrid className="mr-2 h-4 w-4 text-primary/80" />
 
-              <span>{workspace.name}</span>
+              <span
+                className={cn(
+                  params.workspaceId === workspace.id && "text-primary"
+                )}
+              >
+                {workspace.name}
+              </span>
             </CommandItem>
           ))}
         </CommandGroup>

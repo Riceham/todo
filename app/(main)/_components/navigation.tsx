@@ -128,7 +128,7 @@ export const Navigation = () => {
         <Separator />
 
         <div className="h-max overflow-hidden overflow-y-auto flex flex-col justify-between p-4 scrollbar">
-          <WorkspaceList n={50} />
+          <WorkspaceList />
         </div>
 
         <div className="flex flex-col w-full items-center">

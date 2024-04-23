@@ -30,7 +30,7 @@ export const Item = ({ label, onClick, active }: ItemProps) => {
     >
       <ChevronRight
         className={cn(
-          "h-5 w-5 shrink-0 text-muted-foreground/50 mr-1",
+          "h-5 w-5 shrink-0 mr-1 text-primary/50",
           active && "text-primary"
         )}
       />
