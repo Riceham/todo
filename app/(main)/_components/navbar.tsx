@@ -3,6 +3,7 @@
 import { Menu } from "lucide-react";
 import { useParams } from "next/navigation";
 
+import { Search } from "./search";
 import { Title } from "./title";
 import { UserAvatar } from "./user-avatar";
 
@@ -22,13 +23,14 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
         </button>
       )}
       <div className="flex items-center justify-between w-full">
-        {params.workspaceId ? (
-          <Title id={params.workspaceId as string} name={"Workspace 10"} />
-        ) : null}
-        <div className="flex items-center gap-x-2">Search</div>
-        <div className="flex items-center gap-x-2">
-          <UserAvatar src="/avatar.png" alt="Sanidhya" />
+        <div>
+          {params.workspaceId ? (
+            <Title id={params.workspaceId as string} name={"Workspace 10"} />
+          ) : null}
         </div>
+        <Search />
+
+        <UserAvatar src="/avatar.png" alt="Sanidhya" />
       </div>
     </nav>
   );

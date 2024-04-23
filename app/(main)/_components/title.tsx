@@ -54,7 +54,7 @@ export const Title = ({ id, name }: TitleProps) => {
           onClick={enableInput}
           variant="ghost"
           size="sm"
-          className="font-normal h-auto px-3 py-2 bg-foreground/10 max-w-xs cursor-text"
+          className="font-normal h-auto px-3 py-2 dark:bg-foreground/10 border max-w-xs cursor-text"
         >
           <Edit className="h-4 w-4 mr-2 text-primary" />
           <span className="truncate">{name}</span>
