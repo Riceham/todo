@@ -49,4 +49,4 @@ export const WORKSPACES = [
   { id: "48", name: "Workspace 48" },
   { id: "49", name: "Workspace 49" },
   { id: "50", name: "Workspace 50" },
-];
+] as const;

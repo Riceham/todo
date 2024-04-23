@@ -10,7 +10,7 @@ export const Search = () => {
   return (
     <Button
       variant="outline"
-      className="md:w-1/3 dark:hover:bg-foreground/10 cursor-text"
+      className="md:w-2/5 dark:hover:bg-foreground/10 cursor-text"
       onClick={onOpen}
     >
       <div className="flex md:justify-between w-full">
