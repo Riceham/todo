@@ -153,8 +153,8 @@ export const Navigation = () => {
 
             <Separator orientation="vertical" className="h-full" />
 
-            <Button size="icon" className="my-4" aria-label="Share To-Do list">
-              <Hint description="Share To-Do list" sideOffset={12}>
+            <Button size="icon" className="my-4" aria-label="Share Todo list">
+              <Hint description="Share Todo list" sideOffset={12}>
                 <Share className="h-6 w-6" />
               </Hint>
             </Button>

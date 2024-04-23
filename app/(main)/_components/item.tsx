@@ -24,7 +24,7 @@ export const Item = ({ label, onClick, active }: ItemProps) => {
     <button
       onClick={onClick}
       className={cn(
-        "group min-h-[27px] text-md py-1.5 px-2.5 w-full hover:bg-primary/10 dark:hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
+        "group min-h-[27px] text-md py-1.5 px-2.5 w-full hover:bg-primary/10 dark:hover:bg-primary/5 flex items-center text-muted-foreground font-medium rounded",
         active && "bg-primary/5 text-primary"
       )}
     >
