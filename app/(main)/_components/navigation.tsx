@@ -124,7 +124,7 @@ export const Navigation = () => {
           </Hint>
         </button>
 
-        <Logo />
+        <Logo isCollapsed={isCollapsed} />
         <Separator />
 
         <div className="h-max overflow-hidden overflow-y-auto flex flex-col justify-between p-4 scrollbar">

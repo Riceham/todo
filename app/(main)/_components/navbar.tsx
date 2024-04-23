@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { Title } from "./title";
+import { UserAvatar } from "./user-avatar";
 
 type NavbarProps = {
   isCollapsed: boolean;
@@ -25,7 +26,9 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           <Title id={params.workspaceId as string} name={"Workspace 10"} />
         ) : null}
         <div className="flex items-center gap-x-2">Search</div>
-        <div className="flex items-center gap-x-2">UserAvatar</div>
+        <div className="flex items-center gap-x-2">
+          <UserAvatar src="/avatar.png" alt="Sanidhya" />
+        </div>
       </div>
     </nav>
   );
