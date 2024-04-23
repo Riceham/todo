@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsLeft, Menu, Plus, Settings, Share } from "lucide-react";
+import { ChevronsLeft, Plus, Settings, Share } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type ElementRef, useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
@@ -12,9 +12,10 @@ import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/hooks/use-settings";
 import { cn } from "@/lib/utils";
 
+import { Navbar } from "./navbar";
 import { WorkspaceList } from "./workspace-list";
 
-export const Sidebar = () => {
+export const Navigation = () => {
   const pathname = usePathname();
   const settings = useSettings();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -172,18 +173,12 @@ export const Sidebar = () => {
       <div
         ref={navbarRef}
         className={cn(
-          "absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]",
+          "absolute top-0 left-60 z-50 w-[calc(100%-240px)]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "left-0 w-full"
         )}
       >
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <button onClick={resetWidth}>
-              <Menu className="h-6 w-6 text-muted-foreground" />
-            </button>
-          )}
-        </nav>
+        <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
       </div>
     </>
   );

@@ -1,0 +1,32 @@
+"use client";
+
+import { Menu } from "lucide-react";
+import { useParams } from "next/navigation";
+
+import { Title } from "./title";
+
+type NavbarProps = {
+  isCollapsed: boolean;
+  onResetWidth: () => void;
+};
+
+export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
+  const params = useParams();
+
+  return (
+    <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4">
+      {isCollapsed && (
+        <button onClick={onResetWidth}>
+          <Menu role="button" className="h-6 w-6 text-muted-foreground" />
+        </button>
+      )}
+      <div className="flex items-center justify-between w-full">
+        {params.workspaceId ? (
+          <Title id={params.workspaceId as string} name={"Workspace 10"} />
+        ) : null}
+        <div className="flex items-center gap-x-2">Search</div>
+        <div className="flex items-center gap-x-2">UserAvatar</div>
+      </div>
+    </nav>
+  );
+};

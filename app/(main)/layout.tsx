@@ -1,17 +1,15 @@
 import type { PropsWithChildren } from "react";
 
-import { Header } from "./_components/header";
 // import { SearchCommand } from "./_components/search-command";
-import { Sidebar } from "./_components/sidebar";
+import { Navigation } from "./_components/navigation";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="h-full flex dark:bg-[#0D171E]">
-      <Sidebar />
+      <Navigation />
 
-      <main className="flex-1 h-full overflow-y-auto">
+      <main className="relative flex-1 h-full overflow-y-auto">
         {/* <SearchCommand /> */}
-        <Header />
         {children}
       </main>
     </div>
