@@ -19,7 +19,9 @@ export const SettingsModal = () => {
           <div className="flex flex-col gap-y-1">
             <Label>Appearance</Label>
             <span className="text-[0.8rem] text-muted-foreground">
-              Customize how CountWave looks on your device.
+              Customize how{" "}
+              <span className="text-primary font-semibold">CountWave</span>{" "}
+              looks on your device.
             </span>
           </div>
 
