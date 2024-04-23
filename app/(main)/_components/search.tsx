@@ -10,17 +10,16 @@ export const Search = () => {
   return (
     <Button
       variant="outline"
-      className="w-1/4 dark:hover:bg-foreground/10 cursor-text"
+      className="md:w-1/3 dark:hover:bg-foreground/10 cursor-text"
       onClick={onOpen}
-      asChild
     >
-      <div className="flex justify-between">
-        <span className="flex items-center">
-          <SearchIcon className="h-4 w-4 mr-3 text-primary" /> Search
-          workspaces...
-        </span>
+      <div className="flex md:justify-between w-full">
+        <div className="flex items-center">
+          <SearchIcon className="h-4 w-4 md:mr-3 text-primary" />
+          <span className="hidden md:block">Search workspaces...</span>
+        </div>
 
-        <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border dark:bg-foreground/10 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+        <kbd className="ml-auto pointer-events-none hidden md:inline-flex h-5 select-none items-center gap-1 rounded border dark:bg-foreground/10 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
           <span className="text-xs">⌘</span>K
         </kbd>
       </div>

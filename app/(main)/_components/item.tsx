@@ -43,8 +43,8 @@ export const Item = ({ label, onClick, active }: ItemProps) => {
             <div
               role="button"
               className={cn(
-                "opacity-0 group-hover:opacity-100 h-full ml-auto rounded-md p-0.5 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-600",
-                active && "opacity-80"
+                "group-hover:opacity-100 h-full ml-auto rounded-md p-0.5 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-600 opacity-100 md:opacity-0",
+                active && "md:opacity-80"
               )}
             >
               <MoreHorizontal className="h-4 w-4 text-muted-foreground" />

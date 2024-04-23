@@ -36,9 +36,12 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
             />
           ) : null}
         </div>
-        <Search />
 
-        <UserAvatar src="/avatar.png" alt="Sanidhya" />
+        <div className="flex md:flex-[0.65] items-center gap-x-2 md:justify-between">
+          <Search />
+
+          <UserAvatar src="/avatar.png" alt="Sanidhya" />
+        </div>
       </div>
     </nav>
   );
