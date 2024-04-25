@@ -16,7 +16,7 @@ export const WelcomeScreen = ({
   imgUrl,
   type = "dashboard",
 }: WelcomeScreenProps) => {
-  const workspace = useCreateWorkspace();
+  const createWorkspace = useCreateWorkspace();
 
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4">
@@ -41,7 +41,7 @@ export const WelcomeScreen = ({
       <h2 className="text-2xl font-medium">{title}</h2>
 
       {type === "dashboard" ? (
-        <Button onClick={workspace.onOpen}>
+        <Button onClick={createWorkspace.onOpen}>
           <PlusCircle className="h-4 w-4 mr-2" />
           Add Workspace
         </Button>

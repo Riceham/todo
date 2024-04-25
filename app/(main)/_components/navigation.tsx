@@ -22,7 +22,7 @@ export const Navigation = () => {
   const params = useParams();
   const settings = useSettings();
   const share = useShare();
-  const workspace = useCreateWorkspace();
+  const createWorkspace = useCreateWorkspace();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const isResizingRef = useRef(false);
@@ -137,7 +137,10 @@ export const Navigation = () => {
         </div>
 
         <div className="flex flex-col w-full items-center">
-          <Button onClick={workspace.onOpen} className="w-3/4 m-2.5 max-w-sm">
+          <Button
+            onClick={createWorkspace.onOpen}
+            className="w-3/4 m-2.5 max-w-sm"
+          >
             <Plus className="w-5 h-5 mr-2" />
             Add Workspace
           </Button>
