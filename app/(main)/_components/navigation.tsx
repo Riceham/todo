@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronsLeft, Plus, Settings, Share2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { type ElementRef, useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -19,6 +19,7 @@ import { WorkspaceList } from "./workspace-list";
 
 export const Navigation = () => {
   const pathname = usePathname();
+  const params = useParams();
   const settings = useSettings();
   const share = useShare();
   const workspace = useWorkspace();
@@ -158,6 +159,8 @@ export const Navigation = () => {
             <Separator orientation="vertical" className="h-full" />
 
             <Button
+              disabled={!params.workspaceId}
+              aria-disabled={!params.workspaceId}
               onClick={share.onOpen}
               size="icon"
               className="my-4"
