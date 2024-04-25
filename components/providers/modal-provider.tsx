@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { CreateWorkspaceModal } from "@/components/modals/create-workspace-modal";
+import { DeleteWorkspaceModal } from "@/components/modals/delete-workspace-modal";
 import { SettingsModal } from "@/components/modals/settings-modal";
 import { ShareModal } from "@/components/modals/share-modal";
 
@@ -20,6 +21,7 @@ export const ModalProvider = () => {
       <SettingsModal />
       <ShareModal />
       <CreateWorkspaceModal />
+      <DeleteWorkspaceModal />
     </>
   );
 };

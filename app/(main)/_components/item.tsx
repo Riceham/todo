@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { useDeleteWorkspace } from "@/hooks/use-delete-workspace";
+import { useParams } from "next/navigation";
 
 type ItemProps = {
   active?: boolean;
@@ -20,6 +22,16 @@ type ItemProps = {
 };
 
 export const Item = ({ label, onClick, active }: ItemProps) => {
+  const deleteWorkspace = useDeleteWorkspace();
+  const params = useParams();
+
+  const handleClick = () => {
+    if (!params.workspaceId) return;
+
+    deleteWorkspace.setWorkspaceId(String(params.workspaceId));
+    deleteWorkspace.onOpen();
+  };
+
   return (
     <button
       onClick={onClick}
@@ -57,7 +69,7 @@ export const Item = ({ label, onClick, active }: ItemProps) => {
             side="right"
             forceMount
           >
-            <DropdownMenuItem onClick={() => {}} className="text-rose-500">
+            <DropdownMenuItem onClick={handleClick} className="text-rose-500">
               <Trash className="h-4 w-4 mr-2" />
               Delete
             </DropdownMenuItem>
