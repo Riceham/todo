@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/hooks/use-settings";
 import { useShare } from "@/hooks/use-share";
+import { useWorkspace } from "@/hooks/use-workspace";
 import { cn } from "@/lib/utils";
 
 import { Navbar } from "./navbar";
@@ -20,6 +21,7 @@ export const Navigation = () => {
   const pathname = usePathname();
   const settings = useSettings();
   const share = useShare();
+  const workspace = useWorkspace();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const isResizingRef = useRef(false);
@@ -134,7 +136,7 @@ export const Navigation = () => {
         </div>
 
         <div className="flex flex-col w-full items-center">
-          <Button className="w-3/4 m-2.5 max-w-sm">
+          <Button onClick={workspace.onOpen} className="w-3/4 m-2.5 max-w-sm">
             <Plus className="w-5 h-5 mr-2" />
             Add Workspace
           </Button>
