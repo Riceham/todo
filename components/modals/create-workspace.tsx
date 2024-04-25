@@ -61,9 +61,10 @@ export const CreateWorkspaceModal = () => {
             Add Workspace
           </DialogTitle>
 
-          <DialogDescription className="text-center font-semibold text-zinc-500">
-            Enhance collaboration and manage todo list more effectively with
-            multiple workspaces.
+          <DialogDescription className="text-center font-medium text-zinc-500">
+            Enhance <strong>collaboration</strong> and{" "}
+            <strong>manage todo list</strong> more effectively with{" "}
+            <strong>multiple workspaces</strong>.
           </DialogDescription>
         </DialogHeader>
 

@@ -41,8 +41,9 @@ export const ShareModal = () => {
             Share Todo List
           </DialogTitle>
 
-          <DialogDescription className="text-center font-semibold text-zinc-500">
-            Share your to-do lists with friends or team members.
+          <DialogDescription className="text-center font-medium text-zinc-500">
+            Share your <strong>todo lists</strong> with <strong>friends</strong>{" "}
+            or <strong>team members</strong>.
           </DialogDescription>
         </DialogHeader>
 
