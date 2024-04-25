@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
-type WorkspaceStore = {
+type CreateWorkspaceStore = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
 };
 
-export const useWorkspace = create<WorkspaceStore>((set) => ({
+export const useCreateWorkspace = create<CreateWorkspaceStore>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),

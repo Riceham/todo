@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useWorkspace } from "@/hooks/use-workspace";
+import { useCreateWorkspace } from "@/hooks/use-create-workspace";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -32,7 +32,7 @@ const formSchema = z.object({
 });
 
 export const CreateWorkspaceModal = () => {
-  const { isOpen, onClose } = useWorkspace();
+  const { isOpen, onClose } = useCreateWorkspace();
 
   const form = useForm({
     resolver: zodResolver(formSchema),

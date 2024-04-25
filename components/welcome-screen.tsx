@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useWorkspace } from "@/hooks/use-workspace";
+import { useCreateWorkspace } from "@/hooks/use-create-workspace";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 
@@ -16,7 +16,7 @@ export const WelcomeScreen = ({
   imgUrl,
   type = "dashboard",
 }: WelcomeScreenProps) => {
-  const workspace = useWorkspace();
+  const workspace = useCreateWorkspace();
 
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4">

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/hooks/use-settings";
 import { useShare } from "@/hooks/use-share";
-import { useWorkspace } from "@/hooks/use-workspace";
+import { useCreateWorkspace } from "@/hooks/use-create-workspace";
 import { cn } from "@/lib/utils";
 
 import { Navbar } from "./navbar";
@@ -22,7 +22,7 @@ export const Navigation = () => {
   const params = useParams();
   const settings = useSettings();
   const share = useShare();
-  const workspace = useWorkspace();
+  const workspace = useCreateWorkspace();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const isResizingRef = useRef(false);
