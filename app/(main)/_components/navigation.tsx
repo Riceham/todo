@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsLeft, Plus, Settings, Share } from "lucide-react";
+import { ChevronsLeft, Plus, Settings, Share2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type ElementRef, useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
@@ -164,7 +164,7 @@ export const Navigation = () => {
               aria-label="Share Todo list"
             >
               <Hint description="Share Todo list" sideOffset={12}>
-                <Share className="h-6 w-6" />
+                <Share2 className="h-6 w-6" />
               </Hint>
             </Button>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, RefreshCw } from "lucide-react";
+import { Check, Copy, LinkIcon, RefreshCw, Share2 } from "lucide-react";
 import { useState } from "react";
 
 import { Hint } from "@/components/hint";
@@ -33,10 +33,11 @@ export const ShareModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen || isLoading} onOpenChange={onClose}>
       <DialogContent className="p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center font-bold">
+          <DialogTitle className="text-2xl text-center font-bold flex justify-center items-center text-primary">
+            <Share2 className="h-6 w-6 mr-2" />
             Share Todo List
           </DialogTitle>
 
@@ -46,8 +47,8 @@ export const ShareModal = () => {
         </DialogHeader>
 
         <div className="p-6">
-          <Label className="uppercase text-xs font-bold text-zinc-500">
-            Link
+          <Label className="uppercase text-xs font-bold text-zinc-500 flex">
+            <LinkIcon className="h-3 w-3 mr-1" /> Link
           </Label>
 
           <div className="flex items-center mt-2 gap-x-2">
@@ -84,10 +85,10 @@ export const ShareModal = () => {
             onClick={() => {}}
             variant="link"
             size="sm"
-            className="group text-xs text-zinc-500 mt-4 dark:hover:text-zinc-400 hover:text-zinc-600 transition"
+            className="group text-sm text-zinc-500 mt-4 dark:hover:text-zinc-400 hover:text-zinc-600 transition"
           >
             Generate a new link
-            <RefreshCw className="w-4 h-4 ml-2 group-hover:rotate-90 transition" />
+            <RefreshCw className="w-4 h-4 ml-2 group-hover:rotate-90 text-primary/90 group-hover:text-primary transition" />
           </Button>
         </div>
       </DialogContent>

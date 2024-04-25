@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LayoutGrid } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -52,10 +53,11 @@ export const CreateWorkspaceModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen || isLoading} onOpenChange={handleClose}>
       <DialogContent className="p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center font-bold">
+          <DialogTitle className="text-2xl text-center font-bold flex justify-center items-center text-primary">
+            <LayoutGrid className="h-6 w-6 mr-2" />
             Add Workspace
           </DialogTitle>
 
