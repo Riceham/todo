@@ -16,6 +16,7 @@ export const WorkspaceList = () => {
         <Item
           active={params.workspaceId === id}
           key={id}
+          id={id}
           label={name}
           onClick={() => router.push(`/dashboard/${id}`)}
         />

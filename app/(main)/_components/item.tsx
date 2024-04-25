@@ -11,24 +11,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 import { useDeleteWorkspace } from "@/hooks/use-delete-workspace";
-import { useParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type ItemProps = {
+  id: string;
   active?: boolean;
   label: string;
   onClick?: () => void;
 };
 
-export const Item = ({ label, onClick, active }: ItemProps) => {
+export const Item = ({ id, label, onClick, active }: ItemProps) => {
   const deleteWorkspace = useDeleteWorkspace();
-  const params = useParams();
 
   const handleClick = () => {
-    if (!params.workspaceId) return;
-
-    deleteWorkspace.setWorkspaceId(String(params.workspaceId));
+    deleteWorkspace.setWorkspaceId(id);
     deleteWorkspace.onOpen();
   };
 
