@@ -70,7 +70,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
                   <p className="text-sm font-medium leading-none">
                     Sanidhya Kr.
                   </p>
-                  <p className="text-xs leading-none text-primary/80">
+                  <p className="text-xs leading-none dark:text-primary/80 text-muted-foreground">
                     sanidhya@gmail.com
                   </p>
                 </div>
