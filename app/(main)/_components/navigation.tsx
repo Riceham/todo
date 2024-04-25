@@ -10,6 +10,7 @@ import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSettings } from "@/hooks/use-settings";
+import { useShare } from "@/hooks/use-share";
 import { cn } from "@/lib/utils";
 
 import { Navbar } from "./navbar";
@@ -18,6 +19,7 @@ import { WorkspaceList } from "./workspace-list";
 export const Navigation = () => {
   const pathname = usePathname();
   const settings = useSettings();
+  const share = useShare();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const isResizingRef = useRef(false);
@@ -153,7 +155,12 @@ export const Navigation = () => {
 
             <Separator orientation="vertical" className="h-full" />
 
-            <Button size="icon" className="my-4" aria-label="Share Todo list">
+            <Button
+              onClick={share.onOpen}
+              size="icon"
+              className="my-4"
+              aria-label="Share Todo list"
+            >
               <Hint description="Share Todo list" sideOffset={12}>
                 <Share className="h-6 w-6" />
               </Hint>

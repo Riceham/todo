@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { SettingsModal } from "@/components/modals/settings-modal";
+import { ShareModal } from "@/components/modals/share-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -16,6 +17,7 @@ export const ModalProvider = () => {
   return (
     <>
       <SettingsModal />
+      <ShareModal />
     </>
   );
 };
