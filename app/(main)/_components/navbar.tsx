@@ -1,9 +1,26 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import {
+  CircleUserRound,
+  LogOut,
+  Menu,
+  Settings,
+  Settings2,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { WORKSPACES } from "@/constants";
+import { useSettings } from "@/hooks/use-settings";
 
 import { Search } from "./search";
 import { Title } from "./title";
@@ -16,6 +33,7 @@ type NavbarProps = {
 
 export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const params = useParams();
+  const settings = useSettings();
 
   return (
     <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4">
@@ -40,7 +58,45 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
         <div className="flex md:flex-[0.65] items-center gap-x-2 md:justify-between">
           <Search />
 
-          <UserAvatar src="/avatar.png" alt="Sanidhya" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <UserAvatar src="/avatar.png" alt="Sanidhya" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-52" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    Sanidhya Kr.
+                  </p>
+                  <p className="text-xs leading-none text-primary/80">
+                    sanidhya@gmail.com
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <CircleUserRound className="h-4 w-4 mr-1 text-primary" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings2 className="h-4 w-4 mr-1 text-primary" />
+                  Manage Subscription
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={settings.onOpen}>
+                  <Settings className="h-4 w-4 mr-1 text-primary" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <LogOut className="h-4 w-4 mr-1 text-primary" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </nav>
