@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -38,6 +39,10 @@ export const ShareModal = () => {
           <DialogTitle className="text-2xl text-center font-bold">
             Share Todo List
           </DialogTitle>
+
+          <DialogDescription className="text-center font-semibold text-zinc-500">
+            Share your to-do lists with friends or team members.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="p-6">
@@ -55,7 +60,7 @@ export const ShareModal = () => {
             />
             <Hint
               side="left"
-              align="end"
+              sideOffset={12}
               description={isCopied ? "Copied" : "Copy to clipboard"}
             >
               <Button
@@ -79,10 +84,10 @@ export const ShareModal = () => {
             onClick={() => {}}
             variant="link"
             size="sm"
-            className="text-xs text-zinc-500 mt-4"
+            className="group text-xs text-zinc-500 mt-4 dark:hover:text-zinc-400 hover:text-zinc-600 transition"
           >
             Generate a new link
-            <RefreshCw className="w-4 h-4 ml-2" />
+            <RefreshCw className="w-4 h-4 ml-2 group-hover:rotate-90 transition" />
           </Button>
         </div>
       </DialogContent>
