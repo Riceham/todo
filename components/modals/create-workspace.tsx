@@ -86,7 +86,6 @@ export const CreateWorkspaceModal = () => {
                       <Input
                         disabled={isLoading}
                         aria-disabled={isLoading}
-                        className="dark:bg-zinc-300/10 bg-zinc-300/50 border-0 dark:text-white text-black"
                         placeholder="Enter workspace name"
                         {...field}
                       />
