@@ -13,7 +13,7 @@ export const SettingsModal = () => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader className="border-b pb-3">
-          <h2 className="text-xl font-medium flex text-primary">
+          <h2 className="text-xl font-medium flex text-primary items-center">
             <Settings className="h-6 w-6 mr-2" />
             My Settings
           </h2>
