@@ -8,7 +8,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
     <div className="h-full flex dark:bg-[#0D171E]">
       <Navigation />
 
-      <main className="relative flex-1 h-full overflow-y-auto">
+      <main className="relative flex-1 h-full overflow-y-auto scrollbar">
         <SearchCommand />
         {children}
       </main>
