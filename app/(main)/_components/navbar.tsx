@@ -26,6 +26,7 @@ import { useSettings } from "@/hooks/use-settings";
 import { Search } from "./search";
 import { Title } from "./title";
 import { UserAvatar } from "./user-avatar";
+import { Hint } from "@/components/hint";
 
 type NavbarProps = {
   isCollapsed: boolean;
@@ -62,16 +63,21 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           <Search />
 
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <UserAvatar src="/avatar.png" alt="Sanidhya" />
-              </Button>
-            </DropdownMenuTrigger>
+            <Hint description="View Profile" side="left" sideOffset={12}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
+                  <UserAvatar src="/avatar.png" alt="Sanidhya" />
+                </Button>
+              </DropdownMenuTrigger>
+            </Hint>
             <DropdownMenuContent className="w-52" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    Sanidhya Kr.
+                    Sanidhya Kr. Verma
                   </p>
                   <p className="text-xs leading-none dark:text-primary/80 text-muted-foreground">
                     sanidhya@gmail.com
