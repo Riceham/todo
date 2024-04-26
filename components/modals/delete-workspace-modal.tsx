@@ -20,11 +20,13 @@ export const DeleteWorkspaceModal = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+
           <AlertDialogDescription>
             You won&apos;t be able to <strong>recover this workspace</strong>{" "}
             after this action.
           </AlertDialogDescription>
         </AlertDialogHeader>
+
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction>Continue</AlertDialogAction>

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CircleArrowUp,
   CircleUserRound,
   LogOut,
   Menu,
@@ -34,6 +35,8 @@ type NavbarProps = {
 export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const params = useParams();
   const settings = useSettings();
+
+  const isSubscribed = true;
 
   return (
     <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4">
@@ -82,8 +85,17 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
                   Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Settings2 className="h-4 w-4 mr-1 text-primary" />
-                  Manage Subscription
+                  {isSubscribed ? (
+                    <>
+                      <Settings2 className="h-4 w-4 mr-1 text-primary" />
+                      Manage Subscription
+                    </>
+                  ) : (
+                    <>
+                      <CircleArrowUp className="h-4 w-4 mr-1 text-primary" />
+                      Upgrade
+                    </>
+                  )}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={settings.onOpen}>
                   <Settings className="h-4 w-4 mr-1 text-primary" />

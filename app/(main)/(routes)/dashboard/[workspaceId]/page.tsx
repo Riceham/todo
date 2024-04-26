@@ -1,7 +1,4 @@
-import { Button } from "@/components/ui/button";
 import { WelcomeScreen } from "@/components/welcome-screen";
-import { PlusCircle } from "lucide-react";
-import Image from "next/image";
 
 const WorkspaceIdPage = () => {
   return (
