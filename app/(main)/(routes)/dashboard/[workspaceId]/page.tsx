@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { Task } from "@/app/(main)/_components/task";
@@ -38,10 +38,14 @@ const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
               <CalendarDays className="h-8 w-8 mr-2 text-primary" />
               Today
             </div>
-            <span className="text-sm ml-2 text-primary">({todos.length})</span>
+            <span className="text-sm ml-1.5 text-primary">
+              ({todos.length})
+            </span>
           </h1>
         </div>
-        <Button className="self-start mb-5">+ Add New Task</Button>
+        <Button className="self-start mb-5">
+          <Plus className="h-4 w-4 mr-2" /> Add New Task
+        </Button>
         <ScrollArea className="flex-1 mb-5">
           <ul className="space-y-3">
             {todos.map((todo) => (
