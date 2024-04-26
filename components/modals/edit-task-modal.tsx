@@ -31,9 +31,7 @@ const formSchema = z.object({
   task: z.string().min(1, {
     message: "Task name is required.",
   }),
-  description: z.string().min(5, {
-    message: "Task description must be atleast 5 characters.",
-  }),
+  description: z.string().optional(),
 });
 
 export function EditTaskModal() {
@@ -118,10 +116,10 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Textarea
-                        rows={6}
                         disabled={isLoading}
                         aria-disabled={isLoading}
                         placeholder="Add a description..."
+                        className="resize-none scrollbar h-36"
                         {...field}
                       />
                     </FormControl>
@@ -142,7 +140,7 @@ export function EditTaskModal() {
             <Button size="sm" className="self-start mb-5">
               <Plus className="h-4 w-4 mr-2" /> Add New Task
             </Button>
-            <ScrollArea className="flex-1 mb-5 max-h-48 overflow-y-auto scrollbar">
+            <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
               <ul className="space-y-3">
                 {new Array(5).fill("").map((_, i) => (
                   <Subtask

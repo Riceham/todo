@@ -1,13 +1,11 @@
 "use client";
 
-import { formatDistance } from "date-fns";
-import { ChevronRight, GripVertical, History, Trash2 } from "lucide-react";
+import { GripVertical, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { useEditTask } from "@/hooks/use-edit-task";
 
 type SubtaskProps = {
   todo: {
@@ -18,12 +16,6 @@ type SubtaskProps = {
 
 export const Subtask = ({ todo }: SubtaskProps) => {
   const [checked, setChecked] = useState(false);
-  const editTask = useEditTask();
-
-  const handleClick = () => {
-    editTask.setTask(todo);
-    editTask.onOpen();
-  };
 
   return (
     <li
@@ -45,11 +37,7 @@ export const Subtask = ({ todo }: SubtaskProps) => {
           onCheckedChange={() => setChecked((prevCheck) => !prevCheck)}
         />
       </Hint>
-      <div
-        role="button"
-        onClick={handleClick}
-        className="flex justify-between items-center w-full cursor-default"
-      >
+      <div className="flex justify-between items-center w-full cursor-default">
         <div className="flex items-center space-x-2">
           <p className={cn("text-sm", checked && "line-through")}>
             {todo.task}
@@ -57,8 +45,8 @@ export const Subtask = ({ todo }: SubtaskProps) => {
         </div>
 
         <Hint description="Delete Subtask" side="left" sideOffset={5}>
-          <button>
-            <Trash2 className="h-4 w-4 text-primary" />
+          <button type="button">
+            <Trash2 className="h-4 w-4 text-destructive/80 hover:text-destructive transition" />
           </button>
         </Hint>
       </div>
