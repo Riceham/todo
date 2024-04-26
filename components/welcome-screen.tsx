@@ -9,12 +9,14 @@ type WelcomeScreenProps = {
   title: string | React.ReactElement;
   imgUrl: Record<"default" | "dark", { src: string; alt: string }>;
   type?: "dashboard" | "workspace";
+  onClick?: () => void;
 };
 
 export const WelcomeScreen = ({
   title,
   imgUrl,
   type = "dashboard",
+  onClick,
 }: WelcomeScreenProps) => {
   const createWorkspace = useCreateWorkspace();
 
@@ -46,7 +48,7 @@ export const WelcomeScreen = ({
           Add Workspace
         </Button>
       ) : (
-        <Button>
+        <Button onClick={onClick}>
           <PlusCircle className="h-4 w-4 mr-2" />
           Create Todo
         </Button>
