@@ -49,7 +49,9 @@ export const Item = ({ id, label, onClick, active }: ItemProps) => {
       <div className="ml-auto flex items-center gap-x-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               className={cn(
                 "group-hover:opacity-100 h-full ml-auto rounded-md p-0.5 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-600 opacity-100 md:opacity-0 group-focus:opacity-100 focus:opacity-100",
                 active && "md:opacity-80"
@@ -61,7 +63,7 @@ export const Item = ({ id, label, onClick, active }: ItemProps) => {
                   active && "text-primary"
                 )}
               />
-            </button>
+            </div>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
