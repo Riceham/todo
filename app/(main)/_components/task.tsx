@@ -22,8 +22,8 @@ export const Task = ({ todo }: TaskProps) => {
     <li
       key={todo.id}
       className={cn(
-        "flex justify-between items-center p-3 dark:bg-gray-800 bg-gray-100 rounded-md shadow transition",
-        checked && "opacity-50"
+        "flex justify-between items-center p-3 dark:bg-gray-800 bg-gray-100 rounded-md shadow transition dark:hover:bg-gray-700 cursor-default",
+        checked && "opacity-50 hover:opacity-60"
       )}
     >
       <div className="flex items-center space-x-2">

@@ -40,7 +40,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const isSubscribed = true;
 
   return (
-    <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4">
+    <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4 shadow-lg border-b-2">
       {isCollapsed && (
         <button onClick={onResetWidth}>
           <Menu role="button" className="h-6 w-6 text-muted-foreground" />
