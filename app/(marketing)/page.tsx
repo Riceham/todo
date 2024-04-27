@@ -1,3 +1,5 @@
+import { Separator } from "@/components/ui/separator";
+
 import { Features } from "./_components/features";
 import { Hero } from "./_components/hero";
 import { Navbar } from "./_components/navbar";
@@ -9,6 +11,9 @@ const MarketingPage = () => {
       <Navbar />
       <Hero />
       <Features />
+
+      <Separator className="mb-12" />
+
       <Pricing />
     </main>
   );

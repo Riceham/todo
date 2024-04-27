@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { FEATURES } from "@/constants";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 type FeatureProps = {
   index: number;
@@ -13,7 +14,7 @@ type FeatureProps = {
 const Feature = ({ index, title, description, image }: FeatureProps) => (
   <div className="md:flex md:items-center gap-x-6">
     {/* Image */}
-    <div className="max-w-xl mx-auto mb-8 md:mb-0" data-aos="fade-up">
+    <div className="max-w-xl mx-auto mb-8 md:mb-0">
       <Image
         className="max-w-full h-auto md:max-w-md rounded-sm"
         src={image}
@@ -41,11 +42,10 @@ export const Features = () => {
         <div className="py-12 md:py-20 border-t border-gray-600">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
-            <div className="inline-flex text-sm font-semibold py-1 px-3 m-2 text-green-600 bg-green-200 rounded-full mb-4">
+            <Badge variant="success" className="py-1 px-3 mb-2">
               Reach goals that matter
-            </div>
+            </Badge>
             <p className="text-xl text-gray-400">
-              {" "}
               Improve your organization as a student with advanced features,
               ensuring everything is perfectly arranged for academic success.
             </p>

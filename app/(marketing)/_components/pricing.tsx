@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -68,27 +69,8 @@ export const tiers: PricingTier[] = [
   },
 ];
 
-const CheckIcon = ({ className }: { className?: string }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={cn("w-6 h-6", className)}
-    >
-      <path
-        fillRule="evenodd"
-        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-        clipRule="evenodd"
-      />
-    </svg>
-  );
-};
-
 export const Pricing = () => {
   const [frequency, setFrequency] = useState(frequencies[0]);
-
-  const bannerText = "";
 
   return (
     <div
@@ -101,14 +83,6 @@ export const Pricing = () => {
               Pricing
             </h1>
           </div>
-
-          {bannerText ? (
-            <div className="w-full lg:w-auto flex justify-center my-4">
-              <p className="w-full px-4 py-3 text-xs bg-slate-100 text-black dark:bg-slate-300/30 dark:text-white/80 rounded-xl">
-                {bannerText}
-              </p>
-            </div>
-          ) : null}
 
           {frequencies.length > 1 ? (
             <div className="mt-16 flex justify-center">
@@ -146,11 +120,11 @@ export const Pricing = () => {
               </RadioGroup>
             </div>
           ) : (
-            <div className="mt-12" aria-hidden="true"></div>
+            <div className="mt-12" aria-hidden="true" />
           )}
 
           <div
-            id="pricing-section" // Added ID to the pricing section
+            id="pricing"
             className={cn(
               "isolate mx-auto mt-4 mb-28 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none",
               tiers.length === 2 ? "lg:grid-cols-2" : "",
@@ -242,6 +216,7 @@ export const Pricing = () => {
                   <Button
                     size="lg"
                     disabled={tier.soldOut}
+                    aria-disabled={tier.soldOut}
                     className={cn(
                       "w-full text-black dark:text-white",
                       !tier.highlighted && !tier.featured
@@ -267,7 +242,7 @@ export const Pricing = () => {
                 >
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
-                      <CheckIcon
+                      <CheckCircle2
                         className={cn(
                           tier.featured ? "text-white dark:text-black" : "",
                           tier.highlighted ? "text-slate-500" : "text-gray-500",

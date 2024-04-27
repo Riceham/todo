@@ -11,7 +11,7 @@ export const ActionButtons = () => {
       </Button>
 
       <Button asChild>
-        <Link href="#pricing-section">Try CountWave</Link>
+        <Link href="#pricing">Try CountWave</Link>
       </Button>
 
       <ModeToggle />
