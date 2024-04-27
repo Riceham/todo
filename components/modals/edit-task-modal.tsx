@@ -182,7 +182,15 @@ export function EditTaskModal() {
               <Separator />
             </SheetHeader>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              <TaskList todos={updatedSubtasks} type="subtasks" />
+              {updatedSubtasks.length === 0 ? (
+                <div className="flex items-center justify-center">
+                  <h3>
+                    No <strong className="text-primary">Subtasks</strong> found.
+                  </h3>
+                </div>
+              ) : (
+                <TaskList todos={updatedSubtasks} type="subtasks" />
+              )}
             </ScrollArea>
 
             <SheetFooter className="py-2 sm:justify-around">
