@@ -1,5 +1,6 @@
 "use client";
 
+import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
 import { CalendarDays, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -25,6 +26,8 @@ const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
 
   if (!todos) redirect("/dashboard");
 
+  const onDragEnd = (result: DropResult) => {};
+
   const handleClick = () => {
     console.log(params.workspaceId);
   };
@@ -47,11 +50,23 @@ const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
           <Plus className="h-4 w-4 mr-2" /> Add New Task
         </Button>
         <ScrollArea className="flex-1 mb-5">
-          <ul className="space-y-3">
-            {todos.map((todo) => (
-              <Task key={todo.id} todo={todo} />
-            ))}
-          </ul>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="lists" type="card" direction="vertical">
+              {(provided) => (
+                <ul
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="space-y-3"
+                >
+                  {todos.map((todo, i) => (
+                    <Task key={todo.id} index={i} todo={todo} />
+                  ))}
+
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>
         </ScrollArea>
       </div>
     );
