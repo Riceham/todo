@@ -56,7 +56,7 @@ export const tiers: PricingTier[] = [
     href: "/subscribe",
     price: { "1": "$12", "2": "$94.99" },
     discountPrice: { "1": "", "2": "" },
-    description: `Get all of CountWaves goodies for 25% off`,
+    description: `Get all of CountWaves goodies.`,
     features: [
       `Unlimited Workspaces`,
       `Unlimited Tasks`,
