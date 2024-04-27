@@ -4,6 +4,7 @@ import { useState } from "react";
 import { reorder } from "@/lib/utils";
 
 import { Task } from "./task";
+import { Subtask } from "./subtask";
 
 type TaskListProps = {
   todos: Readonly<
@@ -12,9 +13,10 @@ type TaskListProps = {
       task: string;
     }[]
   >;
+  type?: "subtasks" | "tasks";
 };
 
-export const TaskList = ({ todos }: TaskListProps) => {
+export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
 
   const onDragEnd = (result: DropResult) => {
@@ -50,9 +52,13 @@ export const TaskList = ({ todos }: TaskListProps) => {
             ref={provided.innerRef}
             className="space-y-3"
           >
-            {orderedTodos.map((todo, i) => (
-              <Task key={todo.id} index={i} todo={todo} />
-            ))}
+            {orderedTodos.map((todo, i) => {
+              return type === "tasks" ? (
+                <Task key={todo.id} index={i} todo={todo} />
+              ) : (
+                <Subtask key={todo.id} index={i} todo={todo} />
+              );
+            })}
 
             {provided.placeholder}
           </ul>

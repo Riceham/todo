@@ -2,10 +2,11 @@
 
 import { Draggable } from "@hello-pangea/dnd";
 import { GripVertical, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type SubtaskProps = {
@@ -18,6 +19,29 @@ type SubtaskProps = {
 
 export const Subtask = ({ todo, index }: SubtaskProps) => {
   const [checked, setChecked] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
+
+  const enableInput = () => {
+    setSubtask(subtask);
+    setIsEditing(true);
+
+    setTimeout(() => {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(0, inputRef.current.value.length);
+    }, 0);
+  };
+
+  const disableInput = () => setIsEditing(false);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubtask(e.target.value);
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") disableInput();
+  };
 
   return (
     <Draggable draggableId={todo.id} index={index}>
@@ -44,11 +68,26 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
             />
           </Hint>
           <div className="flex justify-between items-center w-full cursor-default">
-            <div className="flex items-center space-x-2">
-              <p className={cn("text-sm", checked && "line-through")}>
-                {todo.task}
-              </p>
-            </div>
+            {isEditing ? (
+              <Input
+                ref={inputRef}
+                onClick={enableInput}
+                onBlur={disableInput}
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+                value={subtask}
+                className="h-7 px-3 mr-2 py-2 bg-background focus-visible:ring-transparent"
+              />
+            ) : (
+              <button
+                onClick={enableInput}
+                className="flex items-center space-x-2 cursor-text"
+              >
+                <p className={cn("text-sm", checked && "line-through")}>
+                  {todo.task}
+                </p>
+              </button>
+            )}
 
             <Hint description="Delete Subtask" side="left" sideOffset={5}>
               <button type="button">

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -51,6 +51,7 @@ const formSchema = z.object({
 
 export function EditTaskModal() {
   const { isOpen, onClose, task } = useEditTask();
+  const [updatedSubtasks, setUpdatedSubtasks] = useState(SUBTASKS);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -158,22 +159,30 @@ export function EditTaskModal() {
               />
             </div>
 
-            <SheetHeader className="pt-4">
-              <SheetTitle className="flex items-center">
-                <ListTodo className="h-5 w-5 mr-2 text-primary" />
-                Subtasks{" "}
-                <span className="text-xs ml-1 text-primary">
-                  ({SUBTASKS.length})
-                </span>
+            <SheetHeader className="flex pt-4 justify-between">
+              <SheetTitle className="flex justify-between items-center">
+                <p className="flex items-center">
+                  <ListTodo className="h-5 w-5 mr-2 text-primary" />
+                  Subtasks{" "}
+                  <span className="text-xs ml-1 text-primary">
+                    ({updatedSubtasks.length})
+                  </span>
+                </p>
+                <Button
+                  size="icon"
+                  onClick={() => {}}
+                  className="h-6 w-6"
+                  title="Add New Subtask"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span className="sr-only">Add New Subtask</span>
+                </Button>
               </SheetTitle>
+
               <Separator />
             </SheetHeader>
-
-            <Button size="sm" className="self-start mb-5">
-              <Plus className="h-4 w-4 mr-2" /> Add New Task
-            </Button>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              <TaskList todos={SUBTASKS} />
+              <TaskList todos={updatedSubtasks} type="subtasks" />
             </ScrollArea>
 
             <SheetFooter className="py-2 sm:justify-around">

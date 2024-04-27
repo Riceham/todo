@@ -16,9 +16,6 @@ type WorkspaceIdPageProps = {
 };
 
 const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
-  // TODO: check if workspace has todo list
-  const hasTodoList = true;
-
   const workspace = WORKSPACES.find(
     (workspace) => params.workspaceId === workspace.id
   );
@@ -68,10 +65,11 @@ const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
             ({workspace.todos.length})
           </span>
         </h1>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" /> Add New Task
+        </Button>
       </div>
-      <Button className="self-start mb-5">
-        <Plus className="h-4 w-4 mr-2" /> Add New Task
-      </Button>
+
       <ScrollArea className="flex-1 mb-5">
         <TaskList todos={workspace.todos} />
       </ScrollArea>

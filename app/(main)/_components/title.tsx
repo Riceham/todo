@@ -1,11 +1,11 @@
 "use client";
 
+import { Edit } from "lucide-react";
 import React, { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Edit } from "lucide-react";
 
 type TitleProps = {
   id: string;
