@@ -1,6 +1,12 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
+
+import { Subtask } from "@/app/(main)/_components/subtask";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,19 +25,26 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useEditTask } from "@/hooks/use-edit-task";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Subtask } from "@/app/(main)/_components/subtask";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { useEditTask } from "@/hooks/use-edit-task";
 
 const formSchema = z.object({
-  task: z.string().min(1, {
-    message: "Task name is required.",
-  }),
-  description: z.string().optional(),
+  task: z
+    .string()
+    .min(1, {
+      message: "Task name is required.",
+    })
+    .max(60, {
+      message: "Task name exceeds 60 characters.",
+    }),
+  description: z
+    .string()
+    .max(200, {
+      message: "Task description exceeds 200 characters.",
+    })
+    .optional(),
 });
 
 export function EditTaskModal() {
@@ -56,7 +69,9 @@ export function EditTaskModal() {
     onClose();
   };
 
-  form.setValue("task", task.task);
+  useEffect(() => {
+    form.setValue("task", task.task);
+  }, [form, task.task]);
   // TODO: set task description if exists
 
   return (
@@ -67,9 +82,12 @@ export function EditTaskModal() {
             <SquarePen className="h-5 w-5 mr-2 text-primary" />
             Edit Task
           </SheetTitle>
+          <Separator />
           <SheetDescription>
             Make changes to your <strong className="text-primary">task</strong>{" "}
-            here. Click <strong className="text-primary">save</strong> when
+            here.
+            <br />
+            Click <strong className="text-primary">Save Changes</strong> when
             you&apos;re done.
           </SheetDescription>
         </SheetHeader>
@@ -130,11 +148,12 @@ export function EditTaskModal() {
               />
             </div>
 
-            <SheetHeader>
+            <SheetHeader className="pt-4">
               <SheetTitle className="flex items-center">
                 <ListTodo className="h-5 w-5 mr-2 text-primary" />
                 Subtasks <span className="text-xs ml-1 text-primary">(5)</span>
               </SheetTitle>
+              <Separator />
             </SheetHeader>
 
             <Button size="sm" className="self-start mb-5">

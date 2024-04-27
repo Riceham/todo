@@ -17,7 +17,7 @@ type EditTaskStore = {
 export const useEditTask = create<EditTaskStore>((set, get) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false }),
+  onClose: () => set({ isOpen: false, task: { id: "", task: "" } }),
   toggle: () => set({ isOpen: !get().isOpen }),
   task: {
     id: "",

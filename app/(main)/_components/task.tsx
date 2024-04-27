@@ -30,7 +30,8 @@ export const Task = ({ todo }: TaskProps) => {
       key={todo.id}
       className={cn(
         "flex space-x-2 items-center p-3 dark:bg-gray-800 bg-gray-100 rounded-md shadow transition dark:hover:bg-gray-700",
-        checked && "opacity-50 hover:opacity-60"
+        checked && "opacity-50 hover:opacity-60",
+        editTask.task.id === todo.id && "dark:bg-gray-700 bg-gray-200"
       )}
     >
       <GripVertical className="h-5 w-5 opacity-80 hover:opacity-100 transition cursor-grab" />
