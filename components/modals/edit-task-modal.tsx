@@ -1,5 +1,6 @@
 "use client";
 
+import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
 import { useEffect } from "react";
@@ -63,6 +64,8 @@ export function EditTaskModal() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
   };
+
+  const onDragEnd = (_result: DropResult) => {};
 
   const handleClose = () => {
     form.reset();
@@ -160,17 +163,30 @@ export function EditTaskModal() {
               <Plus className="h-4 w-4 mr-2" /> Add New Task
             </Button>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              <ul className="space-y-3">
-                {new Array(5).fill("").map((_, i) => (
-                  <Subtask
-                    key={i + 1}
-                    todo={{
-                      id: String(i + 1),
-                      task: `Subtask ${i + 1}`,
-                    }}
-                  />
-                ))}
-              </ul>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="lists" type="card" direction="vertical">
+                  {(provided) => (
+                    <ul
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="space-y-3"
+                    >
+                      {new Array(5).fill("").map((_, i) => (
+                        <Subtask
+                          key={i + 1}
+                          todo={{
+                            id: String(i + 1),
+                            task: `Subtask ${i + 1}`,
+                          }}
+                          index={i}
+                        />
+                      ))}
+
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </ScrollArea>
 
             <SheetFooter className="py-2 sm:justify-around">

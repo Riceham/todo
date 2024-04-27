@@ -26,7 +26,7 @@ const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
 
   if (!todos) redirect("/dashboard");
 
-  const onDragEnd = (result: DropResult) => {};
+  const onDragEnd = (_result: DropResult) => {};
 
   const handleClick = () => {
     console.log(params.workspaceId);

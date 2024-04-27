@@ -7,8 +7,8 @@ import { useState } from "react";
 
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
 import { useEditTask } from "@/hooks/use-edit-task";
+import { cn } from "@/lib/utils";
 
 type TaskProps = {
   todo: {
