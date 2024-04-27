@@ -30,6 +30,7 @@ export const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const [isMounted, setIsMounted] = useState(false);
 
   const handleMouseMove = (event: MouseEvent) => {
     if (!isResizingRef.current) return;
@@ -94,6 +95,10 @@ export const Navigation = () => {
   };
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (isMobile) collapse();
     else resetWidth();
   }, [isMobile]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -101,6 +106,8 @@ export const Navigation = () => {
   useEffect(() => {
     if (isMobile) collapse();
   }, [pathname, isMobile]);
+
+  if (!isMounted) return null;
 
   return (
     <>
