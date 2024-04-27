@@ -1,13 +1,13 @@
 "use client";
 
-import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { Subtask } from "@/app/(main)/_components/subtask";
+import { TaskList } from "@/app/(main)/_components/task-list";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -26,12 +28,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { useEditTask } from "@/hooks/use-edit-task";
-import { TaskList } from "@/app/(main)/_components/task-list";
 import { SUBTASKS } from "@/constants";
+import { useEditTask } from "@/hooks/use-edit-task";
 
 const formSchema = z.object({
   task: z
@@ -67,17 +66,17 @@ export function EditTaskModal() {
     console.log(values);
   };
 
-  const onDragEnd = (_result: DropResult) => {};
-
   const handleClose = () => {
     form.reset();
     onClose();
   };
 
+  const isTaskCompleted = false;
+
   useEffect(() => {
     form.setValue("task", task.task);
+    // TODO: set task description if exists
   }, [form, task.task]);
-  // TODO: set task description if exists
 
   return (
     <Sheet open={isOpen || isLoading} onOpenChange={handleClose}>
@@ -86,6 +85,12 @@ export function EditTaskModal() {
           <SheetTitle className="flex items-center">
             <SquarePen className="h-5 w-5 mr-2 text-primary" />
             Edit Task
+            <Badge
+              className="ml-2"
+              variant={isTaskCompleted ? "success" : "default"}
+            >
+              {isTaskCompleted ? "Completed" : "Pending"}
+            </Badge>
           </SheetTitle>
           <Separator />
           <SheetDescription>
@@ -156,7 +161,10 @@ export function EditTaskModal() {
             <SheetHeader className="pt-4">
               <SheetTitle className="flex items-center">
                 <ListTodo className="h-5 w-5 mr-2 text-primary" />
-                Subtasks <span className="text-xs ml-1 text-primary">(5)</span>
+                Subtasks{" "}
+                <span className="text-xs ml-1 text-primary">
+                  ({SUBTASKS.length})
+                </span>
               </SheetTitle>
               <Separator />
             </SheetHeader>
