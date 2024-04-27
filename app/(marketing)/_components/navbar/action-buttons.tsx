@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const ActionButtons = () => {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <div className="flex items-center gap-x-2">

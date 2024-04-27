@@ -45,7 +45,7 @@ export const Features = () => {
             <Badge variant="success" className="py-1 px-3 mb-2">
               Reach goals that matter
             </Badge>
-            <p className="text-xl text-gray-400">
+            <p className="text-xl dark:text-gray-400">
               Improve your organization as a student with advanced features,
               ensuring everything is perfectly arranged for academic success.
             </p>
