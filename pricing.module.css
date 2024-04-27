@@ -1,11 +1,11 @@
 .fancyOverlay,
 .fancyGlass {
-  --primary-light: theme('colors.slate.400');
-  --primary-main: theme('colors.slate.500');
-  --primary-darker: theme('colors.slate.900');
-  --secondary-light: theme('colors.yellow.400');
-  --secondary-main: theme('colors.yellow.500');
-  --secondary-darker: theme('colors.yellow.900');
+  --primary-light: theme("colors.slate.400");
+  --primary-main: theme("colors.slate.500");
+  --primary-darker: theme("colors.slate.900");
+  --secondary-light: theme("colors.yellow.400");
+  --secondary-main: theme("colors.yellow.500");
+  --secondary-darker: theme("colors.yellow.900");
   --glass-color: 234, 179, 8;
 }
 
@@ -13,12 +13,12 @@
   * Overlay gradients & animation - used as page background.
   */
 @property --fancy-x {
-  syntax: '<percentage>';
+  syntax: "<percentage>";
   inherits: true;
   initial-value: 0%;
 }
 @property --fancy-y {
-  syntax: '<percentage>';
+  syntax: "<percentage>";
   inherits: true;
   initial-value: 0%;
 }
@@ -54,7 +54,7 @@
 .fancyOverlay::after {
   --maximum-opacity: 0.1;
 
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -86,7 +86,7 @@
 }
 
 .fancyGlassContrast:after {
-  content: '';
+  content: "";
   width: calc(100% + 2px);
   height: calc(100% + 2px);
   background: var(--primary-darker);
@@ -99,7 +99,7 @@
 
 .fancyGlassContrast:before,
 .fancyGlass:before {
-  content: '';
+  content: "";
   width: calc(100% + 2px);
   height: calc(100% + 2px);
   background: linear-gradient(
@@ -118,26 +118,27 @@
   pointer-events: none;
 
   /* Hover effect */
-.image-hover:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
-}
-
-/* Define the animation */
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(50px); /* Move the image down initially */
+  .image-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0); /* Move the image back to its original position */
+
+  /* Define the animation */
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(50px); /* Move the image down initially */
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(
+        0
+      ); /* Move the image back to its original position */
+    }
   }
-}
 
-/* Apply the animation to the image */
-.animated-image {
-  animation: slideIn 0.5s ease-in-out;
-}
-
+  /* Apply the animation to the image */
+  .animated-image {
+    animation: slideIn 0.5s ease-in-out;
+  }
 }
