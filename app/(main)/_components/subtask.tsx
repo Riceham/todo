@@ -21,7 +21,7 @@ export const Subtask = ({ todo }: SubtaskProps) => {
     <li
       key={todo.id}
       className={cn(
-        "flex space-x-2 items-center p-2 dark:bg-gray-800 bg-gray-100 rounded-md shadow transition dark:hover:bg-gray-700",
+        "flex space-x-2 items-center p-2 dark:bg-gray-800 bg-gray-100 hover:bg-gray-200 rounded-md shadow transition dark:hover:bg-gray-700",
         checked && "opacity-50 hover:opacity-60"
       )}
     >
