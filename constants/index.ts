@@ -3622,3 +3622,24 @@ export const SUBTASKS = [
     task: "Subtask 5",
   },
 ] as const;
+
+export const FEATURES = [
+  {
+    title: "Student-Driven Study Planner",
+    description:
+      "Tailored for students preparing for exams and meeting assignment deadlines. Stay organized with our student-specific to-do list, designed by students for students.",
+    image: "/features/img1.png",
+  },
+  {
+    title: "Seamless Sharing and Collaboration",
+    description:
+      "Collaborate effortlessly with your class or your friends by sharing your to-do lists, enhancing teamwork and productivity.",
+    image: "/features/img2.png",
+  },
+  {
+    title: "Streamlined Task Management for Ultimate Organization",
+    description:
+      "Upgrade to a smarter to-do list with special features like nesting tasks, ensuring every assignment, task, and exam is perfectly organized.",
+    image: "/features/img3.png",
+  },
+] as const;

@@ -1,17 +1,17 @@
+import { Features } from "./_components/features";
 import { Hero } from "./_components/hero";
 import { Navbar } from "./_components/navbar";
 import { Pricing } from "./_components/pricing";
-import { Features } from "./_components/features";
 
-const Home = () => {
+const MarketingPage = () => {
   return (
-    <div style={{ backgroundColor: "#141414" }}>
+    <main className="bg-background">
       <Navbar />
       <Hero />
       <Features />
       <Pricing />
-    </div>
+    </main>
   );
 };
 
-export default Home;
+export default MarketingPage;

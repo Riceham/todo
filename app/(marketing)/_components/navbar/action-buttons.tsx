@@ -1,20 +1,20 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
+import Link from "next/link";
 
-const ActionButtons = () => {
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
+
+export const ActionButtons = () => {
   return (
-    <div className="flex items-center gap-4">
-      <Button aria-label="login button" variant="custom" className="text-md text-black bg-yellow-400 hover:bg-yellow-400/90">
-        Sign in
+    <div className="flex items-center gap-x-2">
+      <Button>
+        <Link href="/dashboard">Dashboard</Link>
       </Button>
-      {/* Updated Pricing button */}
-      <a href="#pricing-section"> {/* Changed href to "#pricing-section" */}
-        <Button aria-label="get started button" variant="custom" className="text-md text-black bg-yellow-400 hover:bg-yellow-400/90">
-          Try CountWave
-        </Button>
-      </a>
+
+      <Button asChild>
+        <Link href="#pricing-section">Try CountWave</Link>
+      </Button>
+
+      <ModeToggle />
     </div>
   );
 };
-
-export default ActionButtons;
