@@ -169,43 +169,7 @@ export const WORKSPACES = [
   {
     id: "3",
     name: "Workspace 3",
-    todos: [
-      {
-        id: "1",
-        task: "Task 1",
-        description: "Task 1 Description",
-      },
-      {
-        id: "2",
-        task: "Task 2",
-        description: "Task 2 Description",
-      },
-      {
-        id: "3",
-        task: "Task 3",
-        description: "Task 3 Description",
-      },
-      {
-        id: "4",
-        task: "Task 4",
-        description: "Task 4 Description",
-      },
-      {
-        id: "5",
-        task: "Task 5",
-        description: "Task 5 Description",
-      },
-      {
-        id: "6",
-        task: "Task 6",
-        description: "Task 6 Description",
-      },
-      {
-        id: "7",
-        task: "Task 7",
-        description: "Task 7 Description",
-      },
-    ],
+    todos: [],
   },
   {
     id: "4",
