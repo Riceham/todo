@@ -1,12 +1,13 @@
-"use client"; // Add this pragma at the top of the file
+"use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import styles from "@/pricing.module.css";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
+
+import styles from "@/pricing.module.css";
 
 export type PricingTierFrequency = {
   id: string;
