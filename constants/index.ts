@@ -3635,3 +3635,26 @@ export const WORKSPACES = [
     ],
   },
 ] as const;
+
+export const SUBTASKS = [
+  {
+    id: "1",
+    task: "Subtask 1",
+  },
+  {
+    id: "2",
+    task: "Subtask 2",
+  },
+  {
+    id: "3",
+    task: "Subtask 3",
+  },
+  {
+    id: "4",
+    task: "Subtask 4",
+  },
+  {
+    id: "5",
+    task: "Subtask 5",
+  },
+] as const;

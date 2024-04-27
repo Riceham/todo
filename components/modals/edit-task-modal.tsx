@@ -30,6 +30,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useEditTask } from "@/hooks/use-edit-task";
+import { TaskList } from "@/app/(main)/_components/task-list";
+import { SUBTASKS } from "@/constants";
 
 const formSchema = z.object({
   task: z
@@ -163,30 +165,7 @@ export function EditTaskModal() {
               <Plus className="h-4 w-4 mr-2" /> Add New Task
             </Button>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="lists" type="card" direction="vertical">
-                  {(provided) => (
-                    <ul
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className="space-y-3"
-                    >
-                      {new Array(5).fill("").map((_, i) => (
-                        <Subtask
-                          key={i + 1}
-                          todo={{
-                            id: String(i + 1),
-                            task: `Subtask ${i + 1}`,
-                          }}
-                          index={i}
-                        />
-                      ))}
-
-                      {provided.placeholder}
-                    </ul>
-                  )}
-                </Droppable>
-              </DragDropContext>
+              <TaskList todos={SUBTASKS} />
             </ScrollArea>
 
             <SheetFooter className="py-2 sm:justify-around">
