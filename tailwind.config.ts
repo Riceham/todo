@@ -1,14 +1,13 @@
-// tailwind.config.ts
-
-import type { Config } from 'tailwindcss';
+import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config: Config = {
   darkMode: "class",
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -20,8 +19,11 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
       colors: {
-        customBackground: '#141414', // Custom color definition
+        customBackground: "#141414", // Custom color definition
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -57,7 +59,7 @@ const config: Config = {
         },
       },
       background: {
-        default: '#141414', // Change the default background color
+        default: "#141414", // Change the default background color
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -81,6 +83,6 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-};
+} satisfies Config;
 
 export default config;

@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { Poppins as FontSans } from "next/font/google";
+import type { PropsWithChildren } from "react";
+
+import { ModalProvider } from "@/components/providers/modal-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-const outfit = Outfit({ subsets: ["latin"] });
+const fontSans = FontSans({
+  subsets: ["latin"],
+  weight: ["200", "400", "500", "600", "700"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "CountWave",
@@ -13,27 +21,26 @@ export const metadata: Metadata = {
   keywords: "CountWavee",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = ({ children }: Readonly<PropsWithChildren>) => {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <link rel="icon" href="/images/logos/logo-1.svg" sizes="any" />
-        <body className={outfit.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+    <html lang="en">
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        >
+          <ModalProvider />
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
   );
-}
+};
+
+export default RootLayout;
