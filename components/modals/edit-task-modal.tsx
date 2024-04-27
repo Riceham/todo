@@ -182,7 +182,8 @@ export function EditTaskModal() {
               <Separator />
             </SheetHeader>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              {updatedSubtasks.length === 0 ? (
+              {/* TODO: replace later with `updatedSubtasks.length === 0` */}
+              {false ? (
                 <div className="flex items-center justify-center">
                   <h3>
                     No <strong className="text-primary">Subtasks</strong> found.
