@@ -8,6 +8,48 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Workspace {
+  id   String @id @default(uuid())
+  name String
+
+  todos Todo[]
+}
+
+model Todo {
+  id          String  @id @default(uuid())
+  task        String
+  description String?
+  order       Int
+
+  isCompleted Boolean @default(false)
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  subtasks SubTask[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([workspaceId])
+}
+
+model SubTask {
+  id    String @id @default(uuid())
+  task  String
+  order Int
+
+  isCompleted Boolean @default(false)
+
+  todoId String
+  todo   Todo   @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([todoId])
+}
+
 model UserSubscription {
   id     String @id @default(uuid())
   userId String @unique
