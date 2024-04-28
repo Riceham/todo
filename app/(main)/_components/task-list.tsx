@@ -43,8 +43,6 @@ export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
     setOrderedTodos(items);
   };
 
-  console.log(orderedTodos);
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="lists" type="card" direction="vertical">

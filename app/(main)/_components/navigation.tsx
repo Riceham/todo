@@ -213,7 +213,11 @@ export const Navigation = ({ workspaces }: NavigationProps) => {
           isMobile && "left-0 w-full"
         )}
       >
-        <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        <Navbar
+          isCollapsed={isCollapsed}
+          onResetWidth={resetWidth}
+          workspaces={workspaces}
+        />
       </div>
     </>
   );

@@ -41,7 +41,7 @@ export const CreateWorkspaceModal = () => {
 
   const { execute, isLoading } = useAction(createWorkspace, {
     onSuccess: (data) => {
-      toast.success(`Workspace "${data.name} created."`);
+      toast.success(`Workspace "${data.name}" created.`);
       router.push(`/dashboard/${data.id}`);
 
       handleClose();

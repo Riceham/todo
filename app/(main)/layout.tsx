@@ -15,6 +15,9 @@ const MainLayout = async ({ children }: PropsWithChildren) => {
     where: {
       userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return (

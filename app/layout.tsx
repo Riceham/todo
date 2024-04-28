@@ -40,7 +40,7 @@ const RootLayout = ({ children }: Readonly<PropsWithChildren>) => {
           >
             <ModalProvider />
             {children}
-            <Toaster />
+            <Toaster richColors closeButton />
           </ThemeProvider>
         </body>
       </html>
