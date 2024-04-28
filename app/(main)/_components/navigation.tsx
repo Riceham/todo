@@ -139,47 +139,49 @@ export const Navigation = () => {
         <Logo isCollapsed={isCollapsed} />
         <Separator />
 
-        <div className="h-max overflow-hidden overflow-y-auto flex flex-col justify-between p-4 scrollbar">
-          <WorkspaceList />
-        </div>
+        <div className="h-[calc(100%-4rem)] flex flex-col justify-between">
+          <div className="h-max overflow-hidden overflow-y-auto flex flex-col justify-between p-4 scrollbar">
+            <WorkspaceList />
+          </div>
 
-        <div className="flex flex-col w-full items-center">
-          <Button
-            onClick={createWorkspace.onOpen}
-            className="w-3/4 m-2.5 max-w-sm"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Add Workspace
-          </Button>
-
-          <Separator />
-
-          <div className="w-full flex items-center justify-center space-x-[15%]">
+          <div className="flex flex-col w-full items-center">
             <Button
-              onClick={settings.onOpen}
-              size="icon"
-              className="my-4"
-              aria-label="My Settings"
+              onClick={createWorkspace.onOpen}
+              className="w-3/4 m-2.5 max-w-sm"
             >
-              <Hint description="My Settings" sideOffset={12}>
-                <Settings className="h-6 w-6" />
-              </Hint>
+              <Plus className="w-5 h-5 mr-2" />
+              Add Workspace
             </Button>
 
-            <Separator orientation="vertical" className="h-full" />
+            <Separator />
 
-            <Button
-              disabled={!params.workspaceId}
-              aria-disabled={!params.workspaceId}
-              onClick={share.onOpen}
-              size="icon"
-              className="my-4"
-              aria-label="Share Todo list"
-            >
-              <Hint description="Share Todo list" sideOffset={12}>
-                <Share2 className="h-6 w-6" />
-              </Hint>
-            </Button>
+            <div className="w-full flex items-center justify-center space-x-[15%]">
+              <Button
+                onClick={settings.onOpen}
+                size="icon"
+                className="my-4"
+                aria-label="My Settings"
+              >
+                <Hint description="My Settings" sideOffset={12}>
+                  <Settings className="h-6 w-6" />
+                </Hint>
+              </Button>
+
+              <Separator orientation="vertical" className="h-full" />
+
+              <Button
+                disabled={!params.workspaceId}
+                aria-disabled={!params.workspaceId}
+                onClick={share.onOpen}
+                size="icon"
+                className="my-4"
+                aria-label="Share Todo list"
+              >
+                <Hint description="Share Todo list" sideOffset={12}>
+                  <Share2 className="h-6 w-6" />
+                </Hint>
+              </Button>
+            </div>
           </div>
         </div>
 

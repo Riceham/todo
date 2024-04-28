@@ -12,7 +12,7 @@ export const WorkspaceList = () => {
 
   return (
     <div>
-      {WORKSPACES.map(({ id, name }) => (
+      {WORKSPACES.slice(0).map(({ id, name }) => (
         <Item
           active={params.workspaceId === id}
           key={id}
