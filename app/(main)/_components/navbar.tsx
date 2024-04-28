@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Hint } from "@/components/hint";
 import { WORKSPACES } from "@/constants";
+import { useProfile } from "@/hooks/use-profile";
 import { useSettings } from "@/hooks/use-settings";
 
 import { Search } from "./search";
@@ -37,6 +38,7 @@ type NavbarProps = {
 export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const params = useParams();
   const settings = useSettings();
+  const profile = useProfile();
   const { isLoaded, isSignedIn, user } = useUser();
   const isSubscribed = true;
 
@@ -91,7 +93,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={profile.onOpen}>
                   <CircleUserRound className="h-4 w-4 mr-1 text-primary" />
                   Profile
                 </DropdownMenuItem>
