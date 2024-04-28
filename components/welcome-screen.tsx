@@ -1,24 +1,25 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useCreateWorkspace } from "@/hooks/use-create-workspace";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
+
+import { Button } from "@/components/ui/button";
+import { useCreateWorkspace } from "@/hooks/use-create-workspace";
 
 type WelcomeScreenProps = {
   title: string | React.ReactElement;
   imgUrl: Record<"default" | "dark", { src: string; alt: string }>;
   type?: "dashboard" | "workspace";
-  onClick?: () => void;
 };
 
 export const WelcomeScreen = ({
   title,
   imgUrl,
   type = "dashboard",
-  onClick,
 }: WelcomeScreenProps) => {
   const createWorkspace = useCreateWorkspace();
+
+  const onClick = () => {};
 
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4">

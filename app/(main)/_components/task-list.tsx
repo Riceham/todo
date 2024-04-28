@@ -1,10 +1,12 @@
+"use client";
+
 import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
 import { useState } from "react";
 
 import { reorder } from "@/lib/utils";
 
-import { Task } from "./task";
 import { Subtask } from "./subtask";
+import { Task } from "./task";
 
 type TaskListProps = {
   todos: Readonly<
