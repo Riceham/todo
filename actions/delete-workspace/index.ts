@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
-import { DeleteWorkspace } from "@/schemas";
+import { DeleteWorkspace } from "@/schema";
 
 import { InputType, ReturnType } from "./types";
 

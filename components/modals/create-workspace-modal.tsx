@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAction } from "@/hooks/use-action";
 import { useCreateWorkspace } from "@/hooks/use-create-workspace";
-import { CreateWorkspace } from "@/schemas";
+import { CreateWorkspace } from "@/schema";
 
 export const CreateWorkspaceModal = () => {
   const { isOpen, onClose } = useCreateWorkspace();
