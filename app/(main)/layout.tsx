@@ -21,7 +21,7 @@ const MainLayout = async ({ children }: PropsWithChildren) => {
       <Navigation workspaces={workspaces} />
 
       <main className="relative flex-1 h-full overflow-y-auto scrollbar">
-        <SearchCommand />
+        <SearchCommand workspaces={workspaces} />
         {children}
       </main>
     </div>

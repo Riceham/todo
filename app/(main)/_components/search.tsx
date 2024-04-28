@@ -7,6 +7,7 @@ import { useSearch } from "@/hooks/use-search";
 
 export const Search = () => {
   const { onOpen } = useSearch();
+
   return (
     <Button
       variant="outline"
