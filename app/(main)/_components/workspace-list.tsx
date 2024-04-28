@@ -3,8 +3,6 @@
 import type { Workspace } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
-import { WORKSPACES } from "@/constants";
-
 import { Item } from "./item";
 
 type WorkspaceListProps = {
