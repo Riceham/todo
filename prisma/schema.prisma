@@ -9,8 +9,9 @@ datasource db {
 }
 
 model Workspace {
-  id   String @id @default(uuid())
-  name String
+  id     String @id @default(uuid())
+  userId String
+  name   String
 
   todos Todo[]
 }
