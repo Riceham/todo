@@ -1,9 +1,10 @@
+import { auth } from "@clerk/nextjs/server";
 import type { PropsWithChildren } from "react";
 
-import { SearchCommand } from "./_components/search-command";
-import { Navigation } from "./_components/navigation";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
+
+import { Navigation } from "./_components/navigation";
+import { SearchCommand } from "./_components/search-command";
 
 const MainLayout = async ({ children }: PropsWithChildren) => {
   const { userId, redirectToSignIn } = auth();

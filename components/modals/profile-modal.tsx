@@ -11,7 +11,7 @@ export const ProfileModal = () => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white h-full w-fit">
-        <UserProfile />
+        <UserProfile routing="hash" />
       </DialogContent>
     </Dialog>
   );
