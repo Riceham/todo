@@ -11,3 +11,14 @@ export const DeleteWorkspace = z.object({
     message: "Workspace id is required.",
   }),
 });
+
+export const UpdateWorkspace = z.object({
+  id: z.string().min(1, {
+    message: "Workspace id is required.",
+  }),
+  updateData: z.object({
+    name: z.string().min(1, {
+      message: "Workspace name is required.",
+    }),
+  }),
+});

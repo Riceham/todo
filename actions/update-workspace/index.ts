@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
-import { CreateWorkspace } from "@/schema";
+import { UpdateWorkspace } from "@/schema";
 
 import { InputType, ReturnType } from "./types";
 
@@ -18,26 +18,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { name } = data;
+  const { id, updateData } = data;
 
-  if (!name) {
+  if (!id || !updateData.name) {
     return {
-      error: "Missing fields. Failed to create workspace.",
+      error: "Missing fields. Failed to update workspace.",
     };
   }
 
   let workspace;
 
   try {
-    workspace = await db.workspace.create({
-      data: {
+    workspace = await db.workspace.update({
+      where: {
+        id,
         userId,
-        name,
       },
+      data: updateData,
     });
   } catch (error) {
     return {
-      error: "Failed to create workspace.",
+      error: "Failed to update workspace.",
     };
   }
 
@@ -46,4 +47,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   return { data: workspace };
 };
 
-export const createWorkspace = createSafeAction(CreateWorkspace, handler);
+export const updateWorkspace = createSafeAction(UpdateWorkspace, handler);

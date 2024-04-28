@@ -2,7 +2,7 @@ import { z } from "zod";
 import { Workspace } from "@prisma/client";
 
 import { ActionState } from "@/lib/create-safe-action";
-import { CreateWorkspace } from "@/schema";
+import { UpdateWorkspace } from "@/schema";
 
-export type InputType = z.infer<typeof CreateWorkspace>;
+export type InputType = z.infer<typeof UpdateWorkspace>;
 export type ReturnType = ActionState<InputType, Workspace>;
