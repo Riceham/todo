@@ -1,11 +1,10 @@
-import { ArrowRight, CircleGauge } from "lucide-react";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { ArrowRight, CircleGauge, Gem } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
 export const Hero = () => {
-  const isLoggedIn = true;
-
   return (
     <section className="md:py-20 py-16">
       <div className="container mx-auto text-center mt-10">
@@ -19,24 +18,29 @@ export const Hero = () => {
         </p>
 
         <div className="flex gap-4 justify-center pt-10">
-          {isLoggedIn ? (
+          <SignedIn>
             <Button size="xl" asChild>
               <Link href="/dashboard">
                 <CircleGauge className="h-4 w-4 mr-3" />
                 Dashboard
               </Link>
             </Button>
-          ) : (
+          </SignedIn>
+
+          <SignedOut>
             <Button size="xl" asChild>
               <Link href="/sign-up">
                 Get started
                 <ArrowRight className="h-4 w-4 ml-3" />
               </Link>
             </Button>
-          )}
+          </SignedOut>
 
           <Button variant="link" size="xl" asChild>
-            <Link href="#pricing">See Pricing</Link>
+            <Link href="#pricing">
+              <Gem className="h-4 w-4 mr-3" />
+              See Pricing
+            </Link>
           </Button>
         </div>
 
