@@ -1,3 +1,5 @@
+import type { PricingTier, PricingTierFrequency } from "@/types/pricing";
+
 export const WORKSPACES = [
   {
     id: "1",
@@ -3643,3 +3645,41 @@ export const FEATURES = [
     image: "/features/img3.png",
   },
 ] as const;
+
+export const FREQUENCIES: PricingTierFrequency[] = [
+  { id: "1", value: "1", label: "Monthly", priceSuffix: "/month" },
+  { id: "2", value: "2", label: "Annually", priceSuffix: "/year" },
+];
+
+export const TIERS: PricingTier[] = [
+  {
+    name: "Free",
+    id: "0",
+    href: "/sign-up",
+    price: { "1": "$0", "2": "$0" },
+    discountPrice: { "1": "", "2": "" },
+    description: `Get a taste of CountWave, no credit card required.`,
+    features: [`1 Workspace`, `3 Tasks `],
+    featured: false,
+    highlighted: true,
+    soldOut: false,
+    cta: `Sign up`,
+  },
+  {
+    name: "Pro",
+    id: "1",
+    href: "/subscribe",
+    price: { "1": "$12", "2": "$94.99" },
+    discountPrice: { "1": "", "2": "" },
+    description: `Get all of CountWaves goodies.`,
+    features: [
+      `Unlimited Workspaces`,
+      `Unlimited Tasks`,
+      `Chat room access with other students`,
+    ],
+    featured: true,
+    highlighted: false,
+    soldOut: false,
+    cta: `Proceed`,
+  },
+];
