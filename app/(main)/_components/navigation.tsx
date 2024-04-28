@@ -1,5 +1,6 @@
 "use client";
 
+import type { Workspace } from "@prisma/client";
 import { ChevronsLeft, Plus, Settings, Share2 } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { type ElementRef, useRef, useState, useEffect } from "react";
@@ -17,7 +18,11 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "./navbar";
 import { WorkspaceList } from "./workspace-list";
 
-export const Navigation = () => {
+type NavigationProps = {
+  workspaces: Workspace[];
+};
+
+export const Navigation = ({ workspaces }: NavigationProps) => {
   const pathname = usePathname();
   const params = useParams();
   const settings = useSettings();
@@ -141,7 +146,13 @@ export const Navigation = () => {
 
         <div className="h-[calc(100%-4rem)] flex flex-col justify-between">
           <div className="h-max overflow-hidden overflow-y-auto flex flex-col justify-between p-4 scrollbar">
-            <WorkspaceList />
+            {workspaces.length === 0 ? (
+              <div className="text-center">
+                <p className="text-sm">No workspaces found.</p>
+              </div>
+            ) : (
+              <WorkspaceList workspaces={workspaces} />
+            )}
           </div>
 
           <div className="flex flex-col w-full items-center">

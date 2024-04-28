@@ -1,18 +1,23 @@
 "use client";
 
+import type { Workspace } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
 import { WORKSPACES } from "@/constants";
 
 import { Item } from "./item";
 
-export const WorkspaceList = () => {
+type WorkspaceListProps = {
+  workspaces: Workspace[];
+};
+
+export const WorkspaceList = ({ workspaces }: WorkspaceListProps) => {
   const router = useRouter();
   const params = useParams();
 
   return (
     <div>
-      {WORKSPACES.slice(0).map(({ id, name }) => (
+      {workspaces.map(({ id, name }) => (
         <Item
           active={params.workspaceId === id}
           key={id}
