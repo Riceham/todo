@@ -13,6 +13,9 @@ model Workspace {
   userId String
   name   String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   todos Todo[]
 }
 
@@ -60,4 +63,7 @@ model UserSubscription {
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
