@@ -1,5 +1,6 @@
 "use client";
 
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import {
   CircleArrowUp,
   CircleUserRound,
@@ -20,13 +21,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Hint } from "@/components/hint";
 import { WORKSPACES } from "@/constants";
 import { useSettings } from "@/hooks/use-settings";
 
 import { Search } from "./search";
 import { Title } from "./title";
 import { UserAvatar } from "./user-avatar";
-import { Hint } from "@/components/hint";
 
 type NavbarProps = {
   isCollapsed: boolean;
@@ -36,8 +37,12 @@ type NavbarProps = {
 export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const params = useParams();
   const settings = useSettings();
-
+  const { isLoaded, isSignedIn, user } = useUser();
   const isSubscribed = true;
+
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
 
   return (
     <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4 shadow-lg border-b-2">
@@ -69,7 +74,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
                   variant="ghost"
                   className="relative h-8 w-8 rounded-full"
                 >
-                  <UserAvatar src="/avatar.png" alt="Sanidhya" />
+                  <UserAvatar src={user.imageUrl} alt={user.firstName || ""} />
                 </Button>
               </DropdownMenuTrigger>
             </Hint>
@@ -77,10 +82,10 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    Sanidhya Kr. Verma
+                    {`${user.firstName} ${user.lastName}`}
                   </p>
                   <p className="text-xs leading-none dark:text-primary/80 text-muted-foreground">
-                    sanidhya@gmail.com
+                    {user.emailAddresses[0].emailAddress}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -109,10 +114,12 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className="h-4 w-4 mr-1 text-primary" />
-                Log out
-              </DropdownMenuItem>
+              <SignOutButton redirectUrl="/sign-in">
+                <DropdownMenuItem>
+                  <LogOut className="h-4 w-4 mr-1 text-primary" />
+                  Log out
+                </DropdownMenuItem>
+              </SignOutButton>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
