@@ -1,4 +1,4 @@
-import { ArrowRight, CircleGauge } from "lucide-react";
+import { ArrowRight, CircleGauge, Gem } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,10 @@ export const Hero = () => {
           )}
 
           <Button variant="link" size="xl" asChild>
-            <Link href="#pricing">See Pricing</Link>
+            <Link href="#pricing">
+              <Gem className="h-4 w-4 mr-3" />
+              See Pricing
+            </Link>
           </Button>
         </div>
 

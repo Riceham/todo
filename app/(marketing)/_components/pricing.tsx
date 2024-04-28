@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -205,32 +206,30 @@ export const Pricing = () => {
                     </span>
                   ) : null}
                 </p>
-                <a
-                  href={tier.href}
-                  aria-describedby={tier.id}
+                <Button
+                  size="lg"
+                  disabled={tier.soldOut}
+                  aria-disabled={tier.soldOut}
                   className={cn(
-                    "flex mt-6 shadow-sm",
-                    tier.soldOut ? "pointer-events-none" : ""
+                    "w-full text-black dark:text-white",
+                    !tier.highlighted && !tier.featured
+                      ? "bg-gray-100 dark:bg-gray-600"
+                      : "bg-slate-300 hover:bg-slate-400 dark:bg-slate-600 dark:hover:bg-slate-700",
+                    tier.featured || tier.soldOut
+                      ? "bg-white dark:bg-neutral-900 hover:bg-gray-200 dark:hover:bg-black"
+                      : "hover:opacity-80 transition-opacity"
                   )}
+                  variant={tier.highlighted ? "default" : "outline"}
+                  asChild
                 >
-                  <Button
-                    size="lg"
-                    disabled={tier.soldOut}
-                    aria-disabled={tier.soldOut}
-                    className={cn(
-                      "w-full text-black dark:text-white",
-                      !tier.highlighted && !tier.featured
-                        ? "bg-gray-100 dark:bg-gray-600"
-                        : "bg-slate-300 hover:bg-slate-400 dark:bg-slate-600 dark:hover:bg-slate-700",
-                      tier.featured || tier.soldOut
-                        ? "bg-white dark:bg-neutral-900 hover:bg-gray-200 dark:hover:bg-black"
-                        : "hover:opacity-80 transition-opacity"
-                    )}
-                    variant={tier.highlighted ? "default" : "outline"}
+                  <Link
+                    href={tier.href}
+                    aria-describedby={tier.id}
+                    className="flex mt-6 shadow-sm"
                   >
                     {tier.soldOut ? "Sold out" : tier.cta}
-                  </Button>
-                </a>
+                  </Link>
+                </Button>
 
                 <ul
                   className={cn(
