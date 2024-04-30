@@ -7,6 +7,9 @@ declare global {
       // supabase db uri
       DATABASE_URL: string;
       DIRECT_URL: string;
+
+      // public base url
+      NEXT_PUBLIC_APP_BASE_URL: string;
     }
   }
 }
