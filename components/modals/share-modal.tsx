@@ -21,7 +21,7 @@ export const ShareModal = () => {
 
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const inviteUrl = "http://localhost:3000/preview/TODO-LIST-ID";
+  const inviteUrl = "";
 
   const onCopy = () => {
     navigator.clipboard.writeText(inviteUrl);
@@ -57,8 +57,9 @@ export const ShareModal = () => {
               className="bg-zinc-300/30 dark:bg-zinc-300/10 text-black dark:text-white cursor-pointer pointer-events-none"
               tabIndex={-1}
               value={inviteUrl}
-              disabled={isLoading}
-              aria-disabled
+              placeholder="Click 'Generate Public URL' below."
+              disabled={isLoading || !inviteUrl}
+              aria-disabled={isLoading || !inviteUrl}
             />
             <Hint
               side="left"
@@ -66,8 +67,8 @@ export const ShareModal = () => {
               description={isCopied ? "Copied" : "Copy to clipboard"}
             >
               <Button
-                disabled={isLoading || isCopied}
-                aria-disabled={isLoading || isCopied}
+                disabled={isLoading || isCopied || !inviteUrl}
+                aria-disabled={isLoading || isCopied || !inviteUrl}
                 onClick={onCopy}
                 size="icon"
               >
