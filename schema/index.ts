@@ -17,8 +17,18 @@ export const UpdateWorkspace = z.object({
     message: "Workspace id is required.",
   }),
   updateData: z.object({
-    name: z.string().min(1, {
-      message: "Workspace name is required.",
-    }),
+    name: z
+      .string()
+      .min(1, {
+        message: "Workspace name is required.",
+      })
+      .optional(),
+    isPublic: z.boolean().optional(),
+    publicId: z
+      .string()
+      .min(1, {
+        message: "Workspace public id is required.",
+      })
+      .optional(),
   }),
 });

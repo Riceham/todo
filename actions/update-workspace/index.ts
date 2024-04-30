@@ -20,7 +20,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
   const { id, updateData } = data;
 
-  if (!id || !updateData.name) {
+  if (!id) {
     return {
       error: "Missing fields. Failed to update workspace.",
     };
