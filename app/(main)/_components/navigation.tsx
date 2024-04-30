@@ -183,7 +183,12 @@ export const Navigation = ({ workspaces }: NavigationProps) => {
               <Button
                 disabled={!params.workspaceId}
                 aria-disabled={!params.workspaceId}
-                onClick={share.onOpen}
+                onClick={() => {
+                  share.setWorkspace(
+                    workspaces.find(({ id }) => id === params.workspaceId)
+                  );
+                  share.onOpen();
+                }}
                 size="icon"
                 className="my-4"
                 aria-label="Share Todo list"

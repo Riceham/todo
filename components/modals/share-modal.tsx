@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, Copy, LinkIcon, RefreshCw, Share2 } from "lucide-react";
+import { Check, Copy, Globe, LinkIcon, RefreshCw, Share2 } from "lucide-react";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
@@ -14,14 +15,54 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useShare } from "@/hooks/use-share";
+import { cn } from "@/lib/utils";
+import { useAction } from "@/hooks/use-action";
+import { updateWorkspace } from "@/actions/update-workspace";
+import { toast } from "sonner";
 
 export const ShareModal = () => {
-  const { isOpen, onClose } = useShare();
-
+  const { isOpen, onClose, workspace } = useShare();
   const [isCopied, setIsCopied] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const inviteUrl = "";
+  const [isPublic, setIsPublic] = useState(workspace?.isPublic);
+  const [publicId, setPublicId] = useState(workspace?.publicId);
+
+  const { execute, isLoading } = useAction(updateWorkspace, {
+    onSuccess: () => {
+      toast.success(`Workspace updated.`);
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  if (!workspace) return null;
+
+  const inviteUrl = publicId
+    ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${publicId}`
+    : "";
+
+  const handleChange = () => {
+    execute({
+      id: workspace.id,
+      updateData: { isPublic: !isPublic },
+    });
+
+    setIsPublic(!isPublic);
+  };
+
+  const generateLink = () => {
+    const newPublicId = uuidv4();
+
+    execute({
+      id: workspace.id,
+      updateData: { isPublic: true, publicId: newPublicId },
+    });
+
+    setIsPublic(true);
+    setPublicId(newPublicId);
+  };
 
   const onCopy = () => {
     navigator.clipboard.writeText(inviteUrl);
@@ -81,17 +122,35 @@ export const ShareModal = () => {
             </Hint>
           </div>
 
-          <Button
-            disabled={isLoading}
-            aria-disabled={isLoading}
-            onClick={() => {}}
-            variant="link"
-            size="sm"
-            className="group text-sm text-zinc-500 mt-4 dark:hover:text-zinc-400 hover:text-zinc-600 transition"
-          >
-            Generate a new link
-            <RefreshCw className="w-4 h-4 ml-2 group-hover:rotate-90 text-primary/90 group-hover:text-primary transition" />
-          </Button>
+          <div className="w-full flex justify-between items-center mt-4">
+            <Button
+              disabled={isLoading}
+              aria-disabled={isLoading}
+              onClick={generateLink}
+              variant="link"
+              size="sm"
+              className="group text-sm text-zinc-500 dark:hover:text-zinc-400 hover:text-zinc-600 transition"
+            >
+              Generate a new link
+              <RefreshCw className="w-4 h-4 ml-2 group-hover:rotate-90 text-primary/90 group-hover:text-primary transition" />
+            </Button>
+
+            <Label className="flex items-center justify-center">
+              <Globe
+                className={cn(
+                  "h-3 w-3 mr-1",
+                  isPublic ? "text-emerald-500" : "text-primary"
+                )}
+              />
+              <p className="text-zinc-400 mr-2">Public</p>
+              <Switch
+                checked={isPublic}
+                onCheckedChange={handleChange}
+                disabled={isLoading || !inviteUrl}
+                aria-disabled={isLoading || !inviteUrl}
+              />
+            </Label>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
