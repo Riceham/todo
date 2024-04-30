@@ -13,6 +13,9 @@ model Workspace {
   userId String
   name   String
 
+  publicId String  @default(uuid())
+  isPublic Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -26,7 +29,6 @@ model Todo {
   order       Int
 
   isCompleted Boolean @default(false)
-  previewUrl  String  @db.Text
 
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
