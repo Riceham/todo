@@ -40,7 +40,7 @@ export const ShareModal = () => {
   if (!workspace) return null;
 
   const inviteUrl = publicId
-    ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${publicId}`
+    ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/preview/${publicId}`
     : "";
 
   const handleChange = () => {
