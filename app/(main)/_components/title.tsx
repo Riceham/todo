@@ -56,7 +56,7 @@ export const Title = ({ id, name }: TitleProps) => {
 
   const onSubmit = () => {
     disableInput();
-    if (name?.trim() === title.trim()) return;
+    if (!title.trim() || name?.trim() === title.trim()) return;
 
     execute({ id, updateData: { name: title } });
   };
