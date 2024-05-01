@@ -1,7 +1,7 @@
 "use client";
 
 import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { reorder } from "@/lib/utils";
 
@@ -42,6 +42,10 @@ export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
 
     setOrderedTodos(items);
   };
+
+  useEffect(() => {
+    setOrderedTodos(todos);
+  }, [todos]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

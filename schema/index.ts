@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+/* ============== WORKSPACE ============== */
+
 export const CreateWorkspace = z.object({
   name: z.string().min(1, {
     message: "Workspace name is required.",
@@ -30,5 +32,16 @@ export const UpdateWorkspace = z.object({
         message: "Workspace public id is required.",
       })
       .optional(),
+  }),
+});
+
+/* ============== TODO ============== */
+
+export const CreateTodo = z.object({
+  workspaceId: z.string().min(1, {
+    message: "Workspace id is required.",
+  }),
+  name: z.string().min(1, {
+    message: "Task name is required.",
   }),
 });

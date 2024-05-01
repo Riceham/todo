@@ -1,25 +1,47 @@
 "use client";
 
-import { PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
+import { createTodo } from "@/actions/create-todo";
 import { Button } from "@/components/ui/button";
+import { useAction } from "@/hooks/use-action";
 import { useCreateWorkspace } from "@/hooks/use-create-workspace";
+import { useEditTask } from "@/hooks/use-edit-task";
 
 type WelcomeScreenProps = {
   title: string | React.ReactElement;
   imgUrl: Record<"default" | "dark", { src: string; alt: string }>;
   type?: "dashboard" | "workspace";
+  workspaceId?: string;
 };
 
 export const WelcomeScreen = ({
   title,
   imgUrl,
   type = "dashboard",
+  workspaceId,
 }: WelcomeScreenProps) => {
   const createWorkspace = useCreateWorkspace();
+  const editTask = useEditTask();
+  const { execute, isLoading } = useAction(createTodo, {
+    onSuccess: (data) => {
+      toast.success(`Todo "${data.task}" created.`);
 
-  const onClick = () => {};
+      editTask.setTask(data);
+      editTask.onOpen();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const onClick = () => {
+    if (!workspaceId) return;
+
+    execute({ workspaceId, name: "Untitled Task" });
+  };
 
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4">
@@ -49,9 +71,22 @@ export const WelcomeScreen = ({
           Add Workspace
         </Button>
       ) : (
-        <Button onClick={onClick}>
-          <PlusCircle className="h-4 w-4 mr-2" />
-          Create Todo
+        <Button
+          onClick={onClick}
+          disabled={isLoading}
+          aria-disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Loading...
+            </>
+          ) : (
+            <>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Create Todo
+            </>
+          )}
         </Button>
       )}
     </div>
