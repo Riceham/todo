@@ -1,8 +1,9 @@
 import { UserProfile } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+import { useTheme } from "next-themes";
+
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProfile } from "@/hooks/use-profile";
-import { useTheme } from "next-themes";
-import { dark } from "@clerk/themes";
 
 export const ProfileModal = () => {
   const { isOpen, onClose } = useProfile();
