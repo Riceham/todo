@@ -45,3 +45,18 @@ export const CreateTodo = z.object({
     message: "Task name is required.",
   }),
 });
+
+export const UpdateTodoOrder = z.object({
+  todos: z.array(
+    z.object({
+      id: z.string(),
+      task: z.string(),
+      description: z.string().nullable(),
+      order: z.number(),
+      isCompleted: z.boolean(),
+      createdAt: z.date(),
+      updatedAt: z.date(),
+    })
+  ),
+  workspaceId: z.string(),
+});

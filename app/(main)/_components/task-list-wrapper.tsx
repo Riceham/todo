@@ -2,7 +2,6 @@
 
 import type { Todo, Workspace } from "@prisma/client";
 import { CalendarDays, Loader2, Plus } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 
 import { createTodo } from "@/actions/create-todo";
@@ -21,13 +20,10 @@ type TaskListWrapperProps = {
 
 export const TaskListWrapper = ({ workspace }: TaskListWrapperProps) => {
   const editTask = useEditTask();
-  const [todos, setTodos] = useState(workspace.todos);
 
   const { execute, isLoading } = useAction(createTodo, {
     onSuccess: (data) => {
       toast.success(`Todo "${data.task}" created.`);
-
-      setTodos([...todos, data]);
 
       editTask.setTask(data);
       editTask.onOpen();
@@ -39,8 +35,6 @@ export const TaskListWrapper = ({ workspace }: TaskListWrapperProps) => {
 
   const onClick = () => {
     execute({ workspaceId: workspace.id, name: "Untitled Task" });
-
-    console.log("TASK_LIST_WRAPPER: ", { todos });
   };
 
   return (
@@ -52,7 +46,9 @@ export const TaskListWrapper = ({ workspace }: TaskListWrapperProps) => {
             Today
           </div>
 
-          <span className="text-sm ml-1.5 text-primary">({todos.length})</span>
+          <span className="text-sm ml-1.5 text-primary">
+            ({workspace.todos.length})
+          </span>
         </h1>
         <Button
           onClick={onClick}
@@ -73,7 +69,7 @@ export const TaskListWrapper = ({ workspace }: TaskListWrapperProps) => {
       </div>
 
       <ScrollArea className="flex-1 mb-5">
-        <TaskList todos={todos} />
+        <TaskList workspaceId={workspace.id} todos={workspace.todos} />
       </ScrollArea>
     </>
   );

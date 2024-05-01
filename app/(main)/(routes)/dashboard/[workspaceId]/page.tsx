@@ -22,7 +22,11 @@ const WorkspaceIdPage = async ({ params }: WorkspaceIdPageProps) => {
       userId,
     },
     include: {
-      todos: true,
+      todos: {
+        orderBy: {
+          order: "asc",
+        },
+      },
     },
   });
 

@@ -1,25 +1,38 @@
 "use client";
 
 import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
+import type { Todo } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
+import { updateTodoOrder } from "@/actions/update-todo-order";
+import { useAction } from "@/hooks/use-action";
 import { reorder } from "@/lib/utils";
 
 import { Subtask } from "./subtask";
 import { Task } from "./task";
 
 type TaskListProps = {
-  todos: Readonly<
-    {
-      id: string;
-      task: string;
-    }[]
-  >;
+  todos: Todo[];
   type?: "subtasks" | "tasks";
+  workspaceId: string;
 };
 
-export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
+export const TaskList = ({
+  workspaceId,
+  todos,
+  type = "tasks",
+}: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
+  const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
+    useAction(updateTodoOrder, {
+      onSuccess: () => {
+        toast.success("Todo reordered");
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    });
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
@@ -41,6 +54,8 @@ export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
     );
 
     setOrderedTodos(items);
+
+    executeUpdateTodoOrder({ todos: items, workspaceId });
   };
 
   useEffect(() => {
@@ -49,7 +64,12 @@ export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="lists" type="card" direction="vertical">
+      <Droppable
+        droppableId="lists"
+        type="card"
+        direction="vertical"
+        isDropDisabled={isTaskLoading}
+      >
         {(provided) => (
           <ul
             {...provided.droppableProps}
@@ -58,7 +78,12 @@ export const TaskList = ({ todos, type = "tasks" }: TaskListProps) => {
           >
             {orderedTodos.map((todo, i) => {
               return type === "tasks" ? (
-                <Task key={todo.id} index={i} todo={todo} />
+                <Task
+                  key={todo.id}
+                  index={i}
+                  todo={todo}
+                  isLoading={isTaskLoading}
+                />
               ) : (
                 <Subtask key={todo.id} index={i} todo={todo} />
               );

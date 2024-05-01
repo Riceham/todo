@@ -1,6 +1,7 @@
 "use client";
 
 import { Draggable } from "@hello-pangea/dnd";
+import type { Todo } from "@prisma/client";
 import { formatDistance } from "date-fns";
 import { ChevronRight, GripVertical, History } from "lucide-react";
 import { useState } from "react";
@@ -11,14 +12,12 @@ import { useEditTask } from "@/hooks/use-edit-task";
 import { cn } from "@/lib/utils";
 
 type TaskProps = {
-  todo: {
-    id: string;
-    task: string;
-  };
+  todo: Todo;
   index: number;
+  isLoading: boolean;
 };
 
-export const Task = ({ todo, index }: TaskProps) => {
+export const Task = ({ todo, index, isLoading }: TaskProps) => {
   const [checked, setChecked] = useState(false);
   const editTask = useEditTask();
 
@@ -28,7 +27,7 @@ export const Task = ({ todo, index }: TaskProps) => {
   };
 
   return (
-    <Draggable draggableId={todo.id} index={index}>
+    <Draggable draggableId={todo.id} index={index} isDragDisabled={isLoading}>
       {(provided) => (
         <li
           {...provided.draggableProps}
