@@ -1,41 +1,33 @@
 "use client";
 
 import { SignIn } from "@clerk/nextjs";
-import { useTheme } from "next-themes";
 import { dark } from "@clerk/themes";
+import { useTheme } from "next-themes";
 
 const SignInPage = () => {
   const { theme } = useTheme();
   const clerkTheme = theme === "dark" ? dark : undefined;
 
-  let textColor = "#FFFFFF";
-  let bgColor = undefined; // Default background color
-
-  if (theme === "light") {
-    textColor = "#000000";
-  } else if (theme === "dark") {
-    bgColor = "#1f2937"; // Background color for dark mode
-  }
+  const bgColor = theme === "dark" ? "#1f2937" : undefined;
+  const textColor = theme === "light" ? "#000000" : "#FFFFFF";
 
   const signInVariables = {
     colorPrimary: "#ffd800",
-    colorBackground: bgColor, // Set background color based on theme
+    colorBackground: bgColor,
+    colorInputBackground: bgColor,
   };
 
   const signInAppearance = {
     baseTheme: clerkTheme,
     variables: signInVariables,
     text: {
-      color: textColor
-    }
+      color: textColor,
+    },
   };
 
   return (
     <div className={theme === "dark" ? "dark" : ""}>
-      <SignIn
-        appearance={signInAppearance}
-        path="/sign-in"
-      />
+      <SignIn appearance={signInAppearance} path="/sign-in" />
     </div>
   );
 };

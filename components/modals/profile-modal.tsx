@@ -25,6 +25,7 @@ export const ProfileModal = () => {
                 colorText: textColor,
                 colorBackground: bgColor,
                 colorInputBackground: bgColor,
+                colorPrimary: "#ffd800",
               },
             }}
           />
