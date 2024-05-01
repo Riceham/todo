@@ -1,11 +1,11 @@
 "use client";
 
+import type { Workspace } from "@prisma/client";
 import { LayoutGrid } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -13,11 +13,14 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { WORKSPACES } from "@/constants";
 import { useSearch } from "@/hooks/use-search";
 import { cn } from "@/lib/utils";
 
-export const SearchCommand = () => {
+type SearchCommandProps = {
+  workspaces: Workspace[];
+};
+
+export const SearchCommand = ({ workspaces }: SearchCommandProps) => {
   const params = useParams();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
@@ -56,7 +59,7 @@ export const SearchCommand = () => {
       <CommandList className="scrollbar">
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Workspaces">
-          {WORKSPACES?.map((workspace) => (
+          {workspaces?.map((workspace) => (
             <CommandItem
               key={workspace.id}
               id={workspace.id}

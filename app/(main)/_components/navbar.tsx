@@ -1,6 +1,7 @@
 "use client";
 
 import { SignOutButton, useUser } from "@clerk/nextjs";
+import { Workspace } from "@prisma/client";
 import {
   CircleArrowUp,
   CircleUserRound,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 
+import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,8 +23,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Hint } from "@/components/hint";
-import { WORKSPACES } from "@/constants";
 import { useProfile } from "@/hooks/use-profile";
 import { useSettings } from "@/hooks/use-settings";
 
@@ -33,9 +33,14 @@ import { UserAvatar } from "./user-avatar";
 type NavbarProps = {
   isCollapsed: boolean;
   onResetWidth: () => void;
+  workspaces: Workspace[];
 };
 
-export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
+export const Navbar = ({
+  isCollapsed,
+  onResetWidth,
+  workspaces,
+}: NavbarProps) => {
   const params = useParams();
   const settings = useSettings();
   const profile = useProfile();
@@ -59,8 +64,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
             <Title
               id={params.workspaceId as string}
               name={
-                WORKSPACES.find(({ id }) => params.workspaceId === id)?.name ||
-                "Untitled"
+                workspaces.find(({ id }) => id === params.workspaceId)?.name
               }
             />
           ) : null}

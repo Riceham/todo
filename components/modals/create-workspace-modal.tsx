@@ -2,9 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LayoutGrid } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
+import { createWorkspace } from "@/actions/create-workspace";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,33 +26,40 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAction } from "@/hooks/use-action";
 import { useCreateWorkspace } from "@/hooks/use-create-workspace";
-
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Workspace name is required.",
-  }),
-});
+import { CreateWorkspace } from "@/schema";
 
 export const CreateWorkspaceModal = () => {
   const { isOpen, onClose } = useCreateWorkspace();
+  const router = useRouter();
+
+  const handleClose = () => {
+    form.reset();
+    onClose();
+  };
+
+  const { execute, isLoading } = useAction(createWorkspace, {
+    onSuccess: (data) => {
+      toast.success(`Workspace "${data.name}" created.`);
+      router.push(`/dashboard/${data.id}`);
+
+      handleClose();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(CreateWorkspace),
     defaultValues: {
       name: "",
     },
   });
 
-  const isLoading = form.formState.isSubmitting;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
-
-  const handleClose = () => {
-    form.reset();
-    onClose();
+  const onSubmit = async (values: z.infer<typeof CreateWorkspace>) => {
+    execute(values);
   };
 
   return (

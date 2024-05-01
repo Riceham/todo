@@ -1,5 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { deleteWorkspace } from "@/actions/delete-workspace";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,13 +14,27 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useAction } from "@/hooks/use-action";
 import { useDeleteWorkspace } from "@/hooks/use-delete-workspace";
 
 export const DeleteWorkspaceModal = () => {
-  const { isOpen, toggle } = useDeleteWorkspace();
+  const router = useRouter();
+  const { isOpen, toggle, onClose, workspaceId } = useDeleteWorkspace();
+
+  const { execute, isLoading } = useAction(deleteWorkspace, {
+    onSuccess: (data) => {
+      toast.success(`Workspace "${data.name} deleted."`);
+      router.push(`/dashboard`);
+
+      onClose();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={toggle}>
+    <AlertDialog open={isOpen || isLoading} onOpenChange={toggle}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -28,8 +46,16 @@ export const DeleteWorkspaceModal = () => {
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel disabled={isLoading} aria-disabled={isLoading}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            disabled={isLoading}
+            aria-disabled={isLoading}
+            onClick={() => execute({ id: workspaceId })}
+          >
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -1,15 +1,18 @@
 "use client";
 
 import { Edit } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAction } from "@/hooks/use-action";
+import { updateWorkspace } from "@/actions/update-workspace";
+import { toast } from "sonner";
 
 type TitleProps = {
   id: string;
-  name: string;
+  name?: string;
 };
 
 export const Title = ({ id, name }: TitleProps) => {
@@ -17,8 +20,18 @@ export const Title = ({ id, name }: TitleProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(name || "Untitled");
 
+  const { execute, isLoading } = useAction(updateWorkspace, {
+    onSuccess: (data) => {
+      toast.success(`Workspace updated.`);
+      setTitle(data.name);
+      disableEditing();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
   const enableInput = () => {
-    setTitle(name);
     setIsEditing(true);
 
     setTimeout(() => {
@@ -29,13 +42,28 @@ export const Title = ({ id, name }: TitleProps) => {
 
   const disableInput = () => setIsEditing(false);
 
+  const disableEditing = () => {
+    setIsEditing(false);
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") disableInput();
+    if (e.key === "Enter") onSubmit();
   };
+
+  const onSubmit = () => {
+    disableInput();
+    if (!title.trim() || name?.trim() === title.trim()) return;
+
+    execute({ id, updateData: { name: title } });
+  };
+
+  useEffect(() => {
+    setTitle(name || "Untitled");
+  }, [name]);
 
   return (
     <div className="flex items-center gap-x-1">
@@ -43,15 +71,19 @@ export const Title = ({ id, name }: TitleProps) => {
         <Input
           ref={inputRef}
           onClick={enableInput}
-          onBlur={disableInput}
+          onBlur={onSubmit}
           onChange={onChange}
           onKeyDown={onKeyDown}
+          disabled={isLoading}
+          aria-disabled={isLoading}
           value={title}
           className="h-9 px-3 py-2 focus-visible:ring-transparent"
         />
       ) : (
         <Button
           onClick={enableInput}
+          disabled={isLoading}
+          aria-disabled={isLoading}
           variant="ghost"
           size="sm"
           className="font-normal h-auto px-3 py-2 dark:bg-foreground/10 border max-w-xs cursor-text"

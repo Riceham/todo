@@ -7,71 +7,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FREQUENCIES, TIERS } from "@/constants";
 import { cn } from "@/lib/utils";
 
 import styles from "@/pricing.module.css";
 
-export type PricingTierFrequency = {
-  id: string;
-  value: string;
-  label: string;
-  priceSuffix: string;
-};
-
-export type PricingTier = {
-  name: string;
-  id: string;
-  href: string;
-  discountPrice: Record<string, string>;
-  price: string | Record<string, string>;
-  description: string | React.ReactNode;
-  features: string[];
-  featured?: boolean;
-  highlighted?: boolean;
-  cta: string;
-  soldOut?: boolean;
-};
-
-export const frequencies: PricingTierFrequency[] = [
-  { id: "1", value: "1", label: "Monthly", priceSuffix: "/month" },
-  { id: "2", value: "2", label: "Annually", priceSuffix: "/year" },
-];
-
-export const tiers: PricingTier[] = [
-  {
-    name: "Free",
-    id: "0",
-    href: "/sign-up",
-    price: { "1": "$0", "2": "$0" },
-    discountPrice: { "1": "", "2": "" },
-    description: `Get a taste of CountWave, no credit card required.`,
-    features: [`1 Workspace`, `3 Tasks `],
-    featured: false,
-    highlighted: true,
-    soldOut: false,
-    cta: `Sign up`,
-  },
-  {
-    name: "Pro",
-    id: "1",
-    href: "/subscribe",
-    price: { "1": "$12", "2": "$94.99" },
-    discountPrice: { "1": "", "2": "" },
-    description: `Get all of CountWaves goodies.`,
-    features: [
-      `Unlimited Workspaces`,
-      `Unlimited Tasks`,
-      `Chat room access with other students`,
-    ],
-    featured: true,
-    highlighted: false,
-    soldOut: false,
-    cta: `Proceed`,
-  },
-];
-
 export const Pricing = () => {
-  const [frequency, setFrequency] = useState(frequencies[0]);
+  const [frequency, setFrequency] = useState(FREQUENCIES[0]);
 
   return (
     <div
@@ -85,20 +27,20 @@ export const Pricing = () => {
             </h1>
           </div>
 
-          {frequencies.length > 1 ? (
+          {FREQUENCIES.length > 1 ? (
             <div className="mt-16 flex justify-center">
               <RadioGroup
                 defaultValue={frequency.value}
                 onValueChange={(value: string) => {
-                  setFrequency(frequencies.find((f) => f.value === value)!);
+                  setFrequency(FREQUENCIES.find((f) => f.value === value)!);
                 }}
                 className="grid gap-x-1 rounded-full p-1 text-center text-xs font-semibold leading-5 bg-white dark:bg-black ring-1 ring-inset ring-gray-200/30 dark:ring-gray-800"
                 style={{
-                  gridTemplateColumns: `repeat(${frequencies.length}, minmax(0, 1fr))`,
+                  gridTemplateColumns: `repeat(${FREQUENCIES.length}, minmax(0, 1fr))`,
                 }}
               >
                 <Label className="sr-only">Payment frequency</Label>
-                {frequencies.map((option) => (
+                {FREQUENCIES.map((option) => (
                   <Label
                     className={cn(
                       frequency.value === option.value
@@ -128,11 +70,11 @@ export const Pricing = () => {
             id="pricing"
             className={cn(
               "isolate mx-auto mt-4 mb-28 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none",
-              tiers.length === 2 ? "lg:grid-cols-2" : "",
-              tiers.length === 3 ? "lg:grid-cols-3" : ""
+              TIERS.length === 2 ? "lg:grid-cols-2" : "",
+              TIERS.length === 3 ? "lg:grid-cols-3" : ""
             )}
           >
-            {tiers.map((tier) => (
+            {TIERS.map((tier) => (
               <div
                 key={tier.id}
                 className={cn(

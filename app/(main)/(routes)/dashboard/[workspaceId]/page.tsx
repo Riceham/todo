@@ -1,5 +1,4 @@
-"use client";
-
+import { auth } from "@clerk/nextjs/server";
 import { CalendarDays, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -7,7 +6,7 @@ import { TaskList } from "@/app/(main)/_components/task-list";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { WelcomeScreen } from "@/components/welcome-screen";
-import { WORKSPACES } from "@/constants";
+import { db } from "@/lib/db";
 
 type WorkspaceIdPageProps = {
   params: {
@@ -15,16 +14,22 @@ type WorkspaceIdPageProps = {
   };
 };
 
-const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
-  const workspace = WORKSPACES.find(
-    (workspace) => params.workspaceId === workspace.id
-  );
+const WorkspaceIdPage = async ({ params }: WorkspaceIdPageProps) => {
+  const { userId, redirectToSignIn } = auth();
+
+  if (!userId) return redirectToSignIn();
+
+  const workspace = await db.workspace.findUnique({
+    where: {
+      id: params.workspaceId,
+      userId,
+    },
+    include: {
+      todos: true,
+    },
+  });
 
   if (!workspace) redirect("/dashboard");
-
-  const handleClick = () => {
-    console.log(params.workspaceId);
-  };
 
   if (workspace.todos.length === 0) {
     return (
@@ -46,7 +51,6 @@ const WorkspaceIdPage = ({ params }: WorkspaceIdPageProps) => {
             alt: "Empty",
           },
         }}
-        onClick={handleClick}
         type="workspace"
       />
     );
