@@ -1,3 +1,4 @@
+import { ThemeSwitch } from "@/components/theme-switch";
 import { Separator } from "@/components/ui/separator";
 
 import { Features } from "./_components/features";
@@ -18,6 +19,10 @@ const MarketingPage = () => {
       <Pricing />
 
       <Footer />
+
+      <aside>
+        <ThemeSwitch />
+      </aside>
     </main>
   );
 };
