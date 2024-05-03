@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
-import { CreateTodo } from "@/schema";
+import { CreateSubTodo } from "@/schema";
 
 import { InputType, ReturnType } from "./types";
 
@@ -18,19 +18,18 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { name, workspaceId } = data;
+  const { name, todoId, workspaceId } = data;
 
-  if (!name || !workspaceId) {
+  if (!name || !todoId || !workspaceId) {
     return {
-      error: "Missing fields. Failed to create todo.",
+      error: "Missing fields. Failed to create subtask.",
     };
   }
 
-  let todo;
-  let workspace;
+  let subtodo;
 
   try {
-    workspace = await db.workspace.findUnique({
+    const workspace = await db.workspace.findUnique({
       where: {
         id: workspaceId,
         userId,
@@ -43,37 +42,43 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       };
     }
 
-    const lastTodo = await db.todo.findFirst({
-      where: { workspaceId },
+    const todo = await db.todo.findUnique({
+      where: {
+        id: todoId,
+        workspaceId,
+      },
+    });
+
+    if (!todo) {
+      return {
+        error: "Todo not found.",
+      };
+    }
+
+    const lastSubTodo = await db.subTask.findFirst({
+      where: { todoId },
       orderBy: { order: "desc" },
       select: { order: true },
     });
 
-    const newOrder = lastTodo ? lastTodo.order + 1 : 1;
+    const newOrder = lastSubTodo ? lastSubTodo.order + 1 : 1;
 
-    todo = await db.todo.create({
+    subtodo = await db.subTask.create({
       data: {
-        workspaceId,
+        todoId,
         task: name,
         order: newOrder,
-      },
-      include: {
-        subtasks: {
-          orderBy: {
-            order: "asc",
-          },
-        },
       },
     });
   } catch (error) {
     return {
-      error: "Failed to create todo.",
+      error: "Failed to create subtask.",
     };
   }
 
   revalidatePath("/dashboard");
-  revalidatePath(`/dashboard/${workspace.id}`);
-  return { data: todo };
+  revalidatePath(`/dashboard/${workspaceId}`);
+  return { data: subtodo };
 };
 
-export const createTodo = createSafeAction(CreateTodo, handler);
+export const createSubTodo = createSafeAction(CreateSubTodo, handler);

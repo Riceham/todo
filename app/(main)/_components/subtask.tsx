@@ -3,11 +3,12 @@
 import { Draggable } from "@hello-pangea/dnd";
 import type { SubTask } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { useEditSubtask } from "@/hooks/use-edit-subtask";
 import { cn } from "@/lib/utils";
 
 type SubtaskProps = {
@@ -17,6 +18,7 @@ type SubtaskProps = {
 
 export const Subtask = ({ todo, index }: SubtaskProps) => {
   const [checked, setChecked] = useState(false);
+  const editSubtask = useEditSubtask();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
@@ -31,7 +33,11 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
     }, 0);
   };
 
-  const disableInput = () => setIsEditing(false);
+  const disableInput = () => {
+    setIsEditing(false);
+
+    editSubtask.setSubtaskId("");
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubtask(e.target.value);
@@ -40,6 +46,10 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") disableInput();
   };
+
+  useEffect(() => {
+    if (todo.id === editSubtask.subtaskId) enableInput();
+  }, [todo.id, editSubtask.subtaskId]);
 
   return (
     <Draggable draggableId={todo.id} index={index}>

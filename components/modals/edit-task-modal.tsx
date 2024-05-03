@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
+import { createSubTodo } from "@/actions/create-subtodo";
 import { deleteTodo } from "@/actions/delete-todo";
 import { updateTodo } from "@/actions/update-todo";
 import { SubTaskList } from "@/app/(main)/_components/subtask-list";
@@ -33,8 +34,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { useEditTask } from "@/hooks/use-edit-task";
 import { useAction } from "@/hooks/use-action";
+import { useEditTask } from "@/hooks/use-edit-task";
+import { useEditSubtask } from "@/hooks/use-edit-subtask";
 
 const formSchema = z.object({
   task: z
@@ -55,8 +57,11 @@ const formSchema = z.object({
 
 export function EditTaskModal() {
   const { isOpen, onClose, task } = useEditTask();
+  const editSubtask = useEditSubtask();
+
   const [updatedSubtasks, setUpdatedSubtasks] = useState(task.subtasks);
   const router = useRouter();
+
   const { execute: executeTodoUpdate, isLoading } = useAction(updateTodo, {
     onSuccess: () => {
       toast.success("Todo updated.");
@@ -75,6 +80,22 @@ export function EditTaskModal() {
         handleClose();
 
         router.push(`/dashboard/${data.workspaceId}`);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
+
+  const { execute: executeSubtaskCreate, isLoading: isCreating } = useAction(
+    createSubTodo,
+    {
+      onSuccess: (data) => {
+        toast.success(`Todo "${data.task}" created.`);
+
+        editSubtask.setSubtaskId(data.id);
+
+        setUpdatedSubtasks([...updatedSubtasks, data]);
       },
       onError: (error) => {
         toast.error(error);
@@ -105,14 +126,18 @@ export function EditTaskModal() {
     executeTodoDelete({ id: task.id, workspaceId: task.workspaceId });
   };
 
+  const handleNewSubtask = () => {
+    executeSubtaskCreate({
+      workspaceId: task.workspaceId,
+      todoId: task.id,
+      name: "Untitled Subtask",
+    });
+  };
+
   const handleClose = () => {
     form.reset();
     onClose();
   };
-
-  useEffect(() => {
-    setUpdatedSubtasks(task.subtasks);
-  }, [task.subtasks]);
 
   useEffect(() => {
     form.setValue("task", task.task);
@@ -120,7 +145,10 @@ export function EditTaskModal() {
   }, [form, task.task, task.description]);
 
   return (
-    <Sheet open={isOpen || isLoading || isDeleting} onOpenChange={handleClose}>
+    <Sheet
+      open={isOpen || isLoading || isDeleting || isCreating}
+      onOpenChange={handleClose}
+    >
       <SheetContent>
         <SheetHeader>
           <SheetTitle className="flex items-center">
@@ -162,8 +190,8 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Input
-                        disabled={isLoading || isDeleting}
-                        aria-disabled={isLoading || isDeleting}
+                        disabled={isLoading || isDeleting || isCreating}
+                        aria-disabled={isLoading || isDeleting || isCreating}
                         placeholder="Enter task name"
                         {...field}
                       />
@@ -185,8 +213,8 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Textarea
-                        disabled={isLoading || isDeleting}
-                        aria-disabled={isLoading || isDeleting}
+                        disabled={isLoading || isDeleting || isCreating}
+                        aria-disabled={isLoading || isDeleting || isCreating}
                         placeholder="Add a description..."
                         className="resize-none scrollbar h-36"
                         {...field}
@@ -210,7 +238,7 @@ export function EditTaskModal() {
                 </p>
                 <Button
                   size="icon"
-                  onClick={() => {}}
+                  onClick={handleNewSubtask}
                   className="h-6 w-6"
                   title="Add New Subtask"
                 >
@@ -232,6 +260,7 @@ export function EditTaskModal() {
                 <SubTaskList
                   todos={updatedSubtasks}
                   workspaceId={task.workspaceId}
+                  todoId={task.id}
                 />
               )}
             </ScrollArea>
@@ -241,16 +270,16 @@ export function EditTaskModal() {
                 type="button"
                 onClick={onDelete}
                 variant="destructive"
-                disabled={isLoading || isDeleting}
-                aria-disabled={isLoading || isDeleting}
+                disabled={isLoading || isDeleting || isCreating}
+                aria-disabled={isLoading || isDeleting || isCreating}
               >
                 <Trash2 className="h-5 w-5 mr-2" />
                 Delete Task
               </Button>
               <Button
                 type="submit"
-                disabled={isLoading || isDeleting}
-                aria-disabled={isLoading || isDeleting}
+                disabled={isLoading || isDeleting || isCreating}
+                aria-disabled={isLoading || isDeleting || isCreating}
               >
                 <Save className="h-5 w-5 mr-2" />
                 Save Changes

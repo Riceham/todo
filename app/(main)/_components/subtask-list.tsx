@@ -7,18 +7,20 @@ import { toast } from "sonner";
 
 import { updateTodoOrder } from "@/actions/update-todo-order";
 import { useAction } from "@/hooks/use-action";
+import { useEditSubtask } from "@/hooks/use-edit-subtask";
 import { reorder } from "@/lib/utils";
 
 import { Subtask } from "./subtask";
-// import { Task } from "./task";
 
 type TaskListProps = {
   todos: SubTask[];
   workspaceId: string;
+  todoId: string;
 };
 
-export const SubTaskList = ({ workspaceId, todos }: TaskListProps) => {
+export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
+  const editSubtask = useEditSubtask();
   const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
     useAction(updateTodoOrder, {
       onSuccess: () => {
