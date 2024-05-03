@@ -29,6 +29,19 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   let updatedTodo;
 
   try {
+    const workspace = await db.workspace.findUnique({
+      where: {
+        id: todo.workspaceId,
+        userId,
+      },
+    });
+
+    if (!workspace) {
+      return {
+        error: "Workspace not found.",
+      };
+    }
+
     updatedTodo = await db.todo.update({
       where: {
         id: todo.id,
