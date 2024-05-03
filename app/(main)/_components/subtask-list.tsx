@@ -5,7 +5,7 @@ import type { SubTask } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { updateTodoOrder } from "@/actions/update-todo-order";
+import { updateSubTodoOrder } from "@/actions/update-subtodo-order";
 import { useAction } from "@/hooks/use-action";
 import { reorder } from "@/lib/utils";
 
@@ -19,10 +19,10 @@ type TaskListProps = {
 
 export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
-  const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
-    useAction(updateTodoOrder, {
+  const { execute: executeUpdateSubTodoOrder, isLoading: isTaskLoading } =
+    useAction(updateSubTodoOrder, {
       onSuccess: () => {
-        toast.success("Todo reordered");
+        toast.success("Subtasks reordered");
       },
       onError: (error) => {
         toast.error(error);
@@ -50,7 +50,7 @@ export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
 
     setOrderedTodos(items);
 
-    // executeUpdateTodoOrder({ todos: items, workspaceId });
+    executeUpdateSubTodoOrder({ workspaceId, todoId, subtasks: items });
   };
 
   useEffect(() => {
@@ -76,6 +76,7 @@ export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
                 key={todo.id}
                 index={i}
                 todo={todo}
+                isLoading={isTaskLoading}
                 workspaceId={workspaceId}
               />
             ))}

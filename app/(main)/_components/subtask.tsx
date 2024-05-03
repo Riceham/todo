@@ -20,9 +20,15 @@ type SubtaskProps = {
   todo: SubTask;
   index: number;
   workspaceId: string;
+  isLoading: boolean;
 };
 
-export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
+export const Subtask = ({
+  todo,
+  index,
+  workspaceId,
+  isLoading,
+}: SubtaskProps) => {
   const [checked, setChecked] = useState(todo.isCompleted);
   const editSubtask = useEditSubtask();
   const router = useRouter();
@@ -30,7 +36,7 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
 
-  const { execute: executeSubTodoUpdate, isLoading } = useAction(
+  const { execute: executeSubTodoUpdate, isLoading: isUpdating } = useAction(
     updateSubTodo,
     {
       onSuccess: (data) => {
@@ -45,19 +51,21 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
     }
   );
 
-  const { execute: executeSubTodoIsCompleteUpdate, isLoading: isUpdating } =
-    useAction(updateSubTodo, {
-      onSuccess: (data) => {
-        toast.success(
-          data.isCompleted ? "Marked as completed." : "Marked as pending."
-        );
+  const {
+    execute: executeSubTodoIsCompleteUpdate,
+    isLoading: isCompleteUpdating,
+  } = useAction(updateSubTodo, {
+    onSuccess: (data) => {
+      toast.success(
+        data.isCompleted ? "Marked as completed." : "Marked as pending."
+      );
 
-        setChecked(data.isCompleted);
-      },
-      onError: (error) => {
-        toast.error(error);
-      },
-    });
+      setChecked(data.isCompleted);
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   const { execute: executeSubTodoDelete, isLoading: isDeleting } = useAction(
     deleteSubTodo,
@@ -129,7 +137,9 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
     <Draggable
       draggableId={todo.id}
       index={index}
-      isDragDisabled={isLoading || isUpdating || isDeleting}
+      isDragDisabled={
+        isLoading || isUpdating || isDeleting || isCompleteUpdating
+      }
     >
       {(provided) => (
         <li
@@ -151,15 +161,19 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
               className="h-4 w-4"
               checked={checked}
               onCheckedChange={toggleChecked}
-              disabled={isUpdating || isDeleting}
-              aria-disabled={isUpdating || isDeleting}
+              disabled={isUpdating || isDeleting || isCompleteUpdating}
+              aria-disabled={isUpdating || isDeleting || isCompleteUpdating}
             />
           </Hint>
           <div className="flex justify-between items-center w-full cursor-default">
             {isEditing ? (
               <Input
-                disabled={isLoading || isUpdating || isDeleting}
-                aria-disabled={isLoading || isUpdating || isDeleting}
+                disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
+                aria-disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
                 ref={inputRef}
                 onClick={enableInput}
                 onBlur={disableInput}
@@ -170,8 +184,12 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
               />
             ) : (
               <button
-                disabled={isLoading || isUpdating || isDeleting}
-                aria-disabled={isLoading || isUpdating || isDeleting}
+                disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
+                aria-disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
                 onClick={enableInput}
                 className="flex items-center space-x-2 cursor-text"
               >

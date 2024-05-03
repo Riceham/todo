@@ -115,3 +115,18 @@ export const DeleteSubTodo = z.object({
     message: "Todo id is required.",
   }),
 });
+
+export const UpdateSubTodoOrder = z.object({
+  subtasks: z.array(
+    z.object({
+      id: z.string(),
+      task: z.string(),
+      order: z.number(),
+      isCompleted: z.boolean(),
+      createdAt: z.date(),
+      updatedAt: z.date(),
+    })
+  ),
+  workspaceId: z.string(),
+  todoId: z.string(),
+});
