@@ -70,3 +70,12 @@ export const UpdateTodo = z.object({
     isCompleted: z.boolean().optional(),
   }),
 });
+
+export const DeleteTodo = z.object({
+  workspaceId: z.string().min(1, {
+    message: "Workspace id is required.",
+  }),
+  id: z.string().min(1, {
+    message: "Todo id is required.",
+  }),
+});

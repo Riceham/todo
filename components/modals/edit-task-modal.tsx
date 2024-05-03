@@ -2,10 +2,15 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
+import { deleteTodo } from "@/actions/delete-todo";
+import { updateTodo } from "@/actions/update-todo";
+import { SubTaskList } from "@/app/(main)/_components/subtask-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,10 +34,7 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { useEditTask } from "@/hooks/use-edit-task";
-import { SubTaskList } from "@/app/(main)/_components/subtask-list";
 import { useAction } from "@/hooks/use-action";
-import { updateTodo } from "@/actions/update-todo";
-import { toast } from "sonner";
 
 const formSchema = z.object({
   task: z
@@ -54,14 +56,31 @@ const formSchema = z.object({
 export function EditTaskModal() {
   const { isOpen, onClose, task } = useEditTask();
   const [updatedSubtasks, setUpdatedSubtasks] = useState(task.subtasks);
-  const { execute, isLoading } = useAction(updateTodo, {
-    onSuccess: (data) => {
-      toast.success(`Todo updated.`);
+  const router = useRouter();
+  const { execute: executeTodoUpdate, isLoading } = useAction(updateTodo, {
+    onSuccess: () => {
+      toast.success("Todo updated.");
     },
     onError: (error) => {
       toast.error(error);
     },
   });
+
+  const { execute: executeTodoDelete, isLoading: isDeleting } = useAction(
+    deleteTodo,
+    {
+      onSuccess: (data) => {
+        toast.success("Todo deleted.");
+
+        handleClose();
+
+        router.push(`/dashboard/${data.workspaceId}`);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -72,7 +91,7 @@ export function EditTaskModal() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    execute({
+    executeTodoUpdate({
       todo: {
         id: task.id,
         workspaceId: task.workspaceId,
@@ -80,6 +99,10 @@ export function EditTaskModal() {
         description: (values.description || "").trim(),
       },
     });
+  };
+
+  const onDelete = () => {
+    executeTodoDelete({ id: task.id, workspaceId: task.workspaceId });
   };
 
   const handleClose = () => {
@@ -99,7 +122,7 @@ export function EditTaskModal() {
   }, [form, task.task, task.description]);
 
   return (
-    <Sheet open={isOpen || isLoading} onOpenChange={handleClose}>
+    <Sheet open={isOpen || isLoading || isDeleting} onOpenChange={handleClose}>
       <SheetContent>
         <SheetHeader>
           <SheetTitle className="flex items-center">
@@ -141,8 +164,8 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Input
-                        disabled={isLoading}
-                        aria-disabled={isLoading}
+                        disabled={isLoading || isDeleting}
+                        aria-disabled={isLoading || isDeleting}
                         placeholder="Enter task name"
                         {...field}
                       />
@@ -164,8 +187,8 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Textarea
-                        disabled={isLoading}
-                        aria-disabled={isLoading}
+                        disabled={isLoading || isDeleting}
+                        aria-disabled={isLoading || isDeleting}
                         placeholder="Add a description..."
                         className="resize-none scrollbar h-36"
                         {...field}
@@ -218,17 +241,18 @@ export function EditTaskModal() {
             <SheetFooter className="py-2 sm:justify-around">
               <Button
                 type="button"
+                onClick={onDelete}
                 variant="destructive"
-                disabled={isLoading}
-                aria-disabled={isLoading}
+                disabled={isLoading || isDeleting}
+                aria-disabled={isLoading || isDeleting}
               >
                 <Trash2 className="h-5 w-5 mr-2" />
                 Delete Task
               </Button>
               <Button
                 type="submit"
-                disabled={isLoading}
-                aria-disabled={isLoading}
+                disabled={isLoading || isDeleting}
+                aria-disabled={isLoading || isDeleting}
               >
                 <Save className="h-5 w-5 mr-2" />
                 Save Changes
