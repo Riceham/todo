@@ -3,7 +3,7 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { formatDistance } from "date-fns";
 import { ChevronRight, GripVertical, History } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { updateTodo } from "@/actions/update-todo";
@@ -57,6 +57,10 @@ export const Task = ({ todo, index, isLoading }: TaskProps) => {
       },
     });
   };
+
+  useEffect(() => {
+    editTask.setTask(todo);
+  }, [todo]);
 
   return (
     <Draggable

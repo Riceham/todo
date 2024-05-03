@@ -3,9 +3,11 @@
 import { Draggable } from "@hello-pangea/dnd";
 import type { SubTask } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { deleteSubTodo } from "@/actions/delete-subtodo";
 import { updateSubTodo } from "@/actions/update-subtodo";
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,6 +25,7 @@ type SubtaskProps = {
 export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
   const [checked, setChecked] = useState(todo.isCompleted);
   const editSubtask = useEditSubtask();
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
@@ -55,6 +58,18 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
         toast.error(error);
       },
     });
+
+  const { execute: executeSubTodoDelete, isLoading: isDeleting } = useAction(
+    deleteSubTodo,
+    {
+      onSuccess: (data) => {
+        toast.success(`Subtask "${data.task}" deleted.`);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
 
   const enableInput = () => {
     setSubtask(subtask);
@@ -102,6 +117,10 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
     });
   };
 
+  const handleDelete = () => {
+    executeSubTodoDelete({ id: todo.id, todoId: todo.todoId, workspaceId });
+  };
+
   useEffect(() => {
     if (todo.id === editSubtask.subtaskId) enableInput();
   }, [todo.id, editSubtask.subtaskId]);
@@ -110,7 +129,7 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
     <Draggable
       draggableId={todo.id}
       index={index}
-      isDragDisabled={isLoading || isUpdating}
+      isDragDisabled={isLoading || isUpdating || isDeleting}
     >
       {(provided) => (
         <li
@@ -132,15 +151,15 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
               className="h-4 w-4"
               checked={checked}
               onCheckedChange={toggleChecked}
-              disabled={isUpdating}
-              aria-disabled={isUpdating}
+              disabled={isUpdating || isDeleting}
+              aria-disabled={isUpdating || isDeleting}
             />
           </Hint>
           <div className="flex justify-between items-center w-full cursor-default">
             {isEditing ? (
               <Input
-                disabled={isLoading || isUpdating}
-                aria-disabled={isLoading || isUpdating}
+                disabled={isLoading || isUpdating || isDeleting}
+                aria-disabled={isLoading || isUpdating || isDeleting}
                 ref={inputRef}
                 onClick={enableInput}
                 onBlur={disableInput}
@@ -151,8 +170,8 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
               />
             ) : (
               <button
-                disabled={isLoading || isUpdating}
-                aria-disabled={isLoading || isUpdating}
+                disabled={isLoading || isUpdating || isDeleting}
+                aria-disabled={isLoading || isUpdating || isDeleting}
                 onClick={enableInput}
                 className="flex items-center space-x-2 cursor-text"
               >
@@ -163,7 +182,7 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
             )}
 
             <Hint description="Delete Subtask" side="left" sideOffset={5}>
-              <button type="button">
+              <button type="button" onClick={handleDelete}>
                 <Trash2 className="h-4 w-4 text-destructive/80 hover:text-destructive transition" />
               </button>
             </Hint>

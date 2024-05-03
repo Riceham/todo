@@ -103,3 +103,15 @@ export const UpdateSubTodo = z.object({
   }),
   workspaceId: z.string(),
 });
+
+export const DeleteSubTodo = z.object({
+  workspaceId: z.string().min(1, {
+    message: "Workspace id is required.",
+  }),
+  todoId: z.string().min(1, {
+    message: "Todo id is required.",
+  }),
+  id: z.string().min(1, {
+    message: "Todo id is required.",
+  }),
+});
