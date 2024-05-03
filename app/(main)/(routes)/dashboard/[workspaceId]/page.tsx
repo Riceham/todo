@@ -26,6 +26,13 @@ const WorkspaceIdPage = async ({ params }: WorkspaceIdPageProps) => {
         orderBy: {
           order: "asc",
         },
+        include: {
+          subtasks: {
+            orderBy: {
+              order: "asc",
+            },
+          },
+        },
       },
     },
   });
