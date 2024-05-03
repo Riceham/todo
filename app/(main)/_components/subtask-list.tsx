@@ -1,27 +1,28 @@
 "use client";
 
 import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
+import type { SubTask } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { updateTodoOrder } from "@/actions/update-todo-order";
+import { updateSubTodoOrder } from "@/actions/update-subtodo-order";
 import { useAction } from "@/hooks/use-action";
 import { reorder } from "@/lib/utils";
-import type { TodoWithSubTasks } from "@/types/workspace";
 
-import { Task } from "./task";
+import { Subtask } from "./subtask";
 
 type TaskListProps = {
-  todos: TodoWithSubTasks[];
+  todos: SubTask[];
   workspaceId: string;
+  todoId: string;
 };
 
-export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
+export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
-  const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
-    useAction(updateTodoOrder, {
+  const { execute: executeUpdateSubTodoOrder, isLoading: isTaskLoading } =
+    useAction(updateSubTodoOrder, {
       onSuccess: () => {
-        toast.success("Todo reordered");
+        toast.success("Subtasks reordered");
       },
       onError: (error) => {
         toast.error(error);
@@ -49,7 +50,7 @@ export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
 
     setOrderedTodos(items);
 
-    executeUpdateTodoOrder({ todos: items, workspaceId });
+    executeUpdateSubTodoOrder({ workspaceId, todoId, subtasks: items });
   };
 
   useEffect(() => {
@@ -71,11 +72,12 @@ export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
             className="space-y-3"
           >
             {orderedTodos.map((todo, i) => (
-              <Task
+              <Subtask
                 key={todo.id}
                 index={i}
                 todo={todo}
                 isLoading={isTaskLoading}
+                workspaceId={workspaceId}
               />
             ))}
 

@@ -2,11 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ListTodo, Plus, Save, SquarePen, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
-import { TaskList } from "@/app/(main)/_components/task-list";
+import { createSubTodo } from "@/actions/create-subtodo";
+import { deleteTodo } from "@/actions/delete-todo";
+import { updateTodo } from "@/actions/update-todo";
+import { SubTaskList } from "@/app/(main)/_components/subtask-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,8 +34,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { SUBTASKS } from "@/constants";
+import { useAction } from "@/hooks/use-action";
 import { useEditTask } from "@/hooks/use-edit-task";
+import { useEditSubtask } from "@/hooks/use-edit-subtask";
 
 const formSchema = z.object({
   task: z
@@ -51,7 +57,51 @@ const formSchema = z.object({
 
 export function EditTaskModal() {
   const { isOpen, onClose, task } = useEditTask();
-  const [updatedSubtasks, setUpdatedSubtasks] = useState(SUBTASKS);
+  const editSubtask = useEditSubtask();
+
+  const [updatedSubtasks, setUpdatedSubtasks] = useState(task.subtasks);
+  const router = useRouter();
+
+  const { execute: executeTodoUpdate, isLoading } = useAction(updateTodo, {
+    onSuccess: () => {
+      toast.success("Todo updated.");
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const { execute: executeTodoDelete, isLoading: isDeleting } = useAction(
+    deleteTodo,
+    {
+      onSuccess: (data) => {
+        toast.success("Todo deleted.");
+
+        handleClose();
+
+        router.push(`/dashboard/${data.workspaceId}`);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
+
+  const { execute: executeSubtaskCreate, isLoading: isCreating } = useAction(
+    createSubTodo,
+    {
+      onSuccess: (data) => {
+        toast.success(`Todo "${data.task}" created.`);
+
+        editSubtask.setSubtaskId(data.id);
+
+        setUpdatedSubtasks([...updatedSubtasks, data]);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -61,10 +111,27 @@ export function EditTaskModal() {
     },
   });
 
-  const isLoading = form.formState.isSubmitting;
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    executeTodoUpdate({
+      todo: {
+        id: task.id,
+        workspaceId: task.workspaceId,
+        task: values.task.trim(),
+        description: (values.description || "").trim(),
+      },
+    });
+  };
+
+  const onDelete = () => {
+    executeTodoDelete({ id: task.id, workspaceId: task.workspaceId });
+  };
+
+  const handleNewSubtask = () => {
+    executeSubtaskCreate({
+      workspaceId: task.workspaceId,
+      todoId: task.id,
+      name: "Untitled Subtask",
+    });
   };
 
   const handleClose = () => {
@@ -72,15 +139,20 @@ export function EditTaskModal() {
     onClose();
   };
 
-  const isTaskCompleted = false;
-
   useEffect(() => {
     form.setValue("task", task.task);
-    // TODO: set task description if exists
-  }, [form, task.task]);
+    form.setValue("description", task?.description || "");
+  }, [form, task.task, task.description]);
+
+  useEffect(() => {
+    setUpdatedSubtasks(task.subtasks);
+  }, [task.subtasks]);
 
   return (
-    <Sheet open={isOpen || isLoading} onOpenChange={handleClose}>
+    <Sheet
+      open={isOpen || isLoading || isDeleting || isCreating}
+      onOpenChange={handleClose}
+    >
       <SheetContent>
         <SheetHeader>
           <SheetTitle className="flex items-center">
@@ -88,9 +160,9 @@ export function EditTaskModal() {
             Edit Task
             <Badge
               className="ml-2"
-              variant={isTaskCompleted ? "success" : "default"}
+              variant={task.isCompleted ? "success" : "default"}
             >
-              {isTaskCompleted ? "Completed" : "Pending"}
+              {task.isCompleted ? "Completed" : "Pending"}
             </Badge>
           </SheetTitle>
           <Separator />
@@ -122,8 +194,8 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Input
-                        disabled={isLoading}
-                        aria-disabled={isLoading}
+                        disabled={isLoading || isDeleting || isCreating}
+                        aria-disabled={isLoading || isDeleting || isCreating}
                         placeholder="Enter task name"
                         {...field}
                       />
@@ -145,8 +217,8 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Textarea
-                        disabled={isLoading}
-                        aria-disabled={isLoading}
+                        disabled={isLoading || isDeleting || isCreating}
+                        aria-disabled={isLoading || isDeleting || isCreating}
                         placeholder="Add a description..."
                         className="resize-none scrollbar h-36"
                         {...field}
@@ -170,7 +242,7 @@ export function EditTaskModal() {
                 </p>
                 <Button
                   size="icon"
-                  onClick={() => {}}
+                  onClick={handleNewSubtask}
                   className="h-6 w-6"
                   title="Add New Subtask"
                 >
@@ -182,32 +254,36 @@ export function EditTaskModal() {
               <Separator />
             </SheetHeader>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              {/* TODO: replace later with `updatedSubtasks.length === 0` */}
-              {false ? (
+              {updatedSubtasks.length === 0 ? (
                 <div className="flex items-center justify-center">
                   <h3>
                     No <strong className="text-primary">Subtasks</strong> found.
                   </h3>
                 </div>
               ) : (
-                <TaskList todos={updatedSubtasks} type="subtasks" />
+                <SubTaskList
+                  todos={updatedSubtasks}
+                  workspaceId={task.workspaceId}
+                  todoId={task.id}
+                />
               )}
             </ScrollArea>
 
             <SheetFooter className="py-2 sm:justify-around">
               <Button
                 type="button"
+                onClick={onDelete}
                 variant="destructive"
-                disabled={isLoading}
-                aria-disabled={isLoading}
+                disabled={isLoading || isDeleting || isCreating}
+                aria-disabled={isLoading || isDeleting || isCreating}
               >
                 <Trash2 className="h-5 w-5 mr-2" />
                 Delete Task
               </Button>
               <Button
                 type="submit"
-                disabled={isLoading}
-                aria-disabled={isLoading}
+                disabled={isLoading || isDeleting || isCreating}
+                aria-disabled={isLoading || isDeleting || isCreating}
               >
                 <Save className="h-5 w-5 mr-2" />
                 Save Changes

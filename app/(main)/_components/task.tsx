@@ -3,32 +3,71 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { formatDistance } from "date-fns";
 import { ChevronRight, GripVertical, History } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
+import { updateTodo } from "@/actions/update-todo";
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAction } from "@/hooks/use-action";
 import { useEditTask } from "@/hooks/use-edit-task";
 import { cn } from "@/lib/utils";
+import type { TodoWithSubTasks } from "@/types/workspace";
 
 type TaskProps = {
-  todo: {
-    id: string;
-    task: string;
-  };
+  todo: TodoWithSubTasks;
   index: number;
+  isLoading: boolean;
 };
 
-export const Task = ({ todo, index }: TaskProps) => {
-  const [checked, setChecked] = useState(false);
+export const Task = ({ todo, index, isLoading }: TaskProps) => {
+  const [checked, setChecked] = useState(todo.isCompleted);
   const editTask = useEditTask();
+  const { execute: executeTodoUpdate, isLoading: isUpdating } = useAction(
+    updateTodo,
+    {
+      onSuccess: (data) => {
+        toast.success(
+          data.isCompleted ? "Marked as completed." : "Marked as pending."
+        );
+
+        setChecked(data.isCompleted);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
 
   const handleClick = () => {
+    if (isLoading || isUpdating) return;
+
     editTask.setTask(todo);
     editTask.onOpen();
   };
 
+  const toggleChecked = () => {
+    executeTodoUpdate({
+      todo: {
+        id: todo.id,
+        workspaceId: todo.workspaceId,
+        task: todo.task,
+        description: todo.description || "",
+        isCompleted: !todo.isCompleted,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (editTask.task.id === todo.id) editTask.setTask(todo);
+  }, [todo]);
+
   return (
-    <Draggable draggableId={todo.id} index={index}>
+    <Draggable
+      draggableId={todo.id}
+      index={index}
+      isDragDisabled={isLoading || isUpdating}
+    >
       {(provided) => (
         <li
           {...provided.draggableProps}
@@ -49,7 +88,9 @@ export const Task = ({ todo, index }: TaskProps) => {
             <Checkbox
               className="h-5 w-5"
               checked={checked}
-              onCheckedChange={() => setChecked((prevCheck) => !prevCheck)}
+              onCheckedChange={toggleChecked}
+              disabled={isUpdating}
+              aria-disabled={isUpdating}
             />
           </Hint>
           <div

@@ -1,27 +1,83 @@
 "use client";
 
 import { Draggable } from "@hello-pangea/dnd";
+import type { SubTask } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
+import { deleteSubTodo } from "@/actions/delete-subtodo";
+import { updateSubTodo } from "@/actions/update-subtodo";
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { useAction } from "@/hooks/use-action";
+import { useEditSubtask } from "@/hooks/use-edit-subtask";
 import { cn } from "@/lib/utils";
 
 type SubtaskProps = {
-  todo: {
-    id: string;
-    task: string;
-  };
+  todo: SubTask;
   index: number;
+  workspaceId: string;
+  isLoading: boolean;
 };
 
-export const Subtask = ({ todo, index }: SubtaskProps) => {
-  const [checked, setChecked] = useState(false);
+export const Subtask = ({
+  todo,
+  index,
+  workspaceId,
+  isLoading,
+}: SubtaskProps) => {
+  const [checked, setChecked] = useState(todo.isCompleted);
+  const editSubtask = useEditSubtask();
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
+
+  const { execute: executeSubTodoUpdate, isLoading: isUpdating } = useAction(
+    updateSubTodo,
+    {
+      onSuccess: (data) => {
+        toast.success("Subtask updated.");
+
+        setSubtask(data.task);
+        setIsEditing(false);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
+
+  const {
+    execute: executeSubTodoIsCompleteUpdate,
+    isLoading: isCompleteUpdating,
+  } = useAction(updateSubTodo, {
+    onSuccess: (data) => {
+      toast.success(
+        data.isCompleted ? "Marked as completed." : "Marked as pending."
+      );
+
+      setChecked(data.isCompleted);
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const { execute: executeSubTodoDelete, isLoading: isDeleting } = useAction(
+    deleteSubTodo,
+    {
+      onSuccess: (data) => {
+        toast.success(`Subtask "${data.task}" deleted.`);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
 
   const enableInput = () => {
     setSubtask(subtask);
@@ -33,7 +89,21 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
     }, 0);
   };
 
-  const disableInput = () => setIsEditing(false);
+  const disableInput = () => {
+    if (subtask === todo.task) return setIsEditing(false);
+
+    executeSubTodoUpdate({
+      subtask: {
+        id: todo.id,
+        todoId: todo.todoId,
+        isCompleted: checked,
+        task: subtask,
+      },
+      workspaceId,
+    });
+
+    editSubtask.setSubtaskId("");
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubtask(e.target.value);
@@ -43,8 +113,34 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
     if (e.key === "Enter") disableInput();
   };
 
+  const toggleChecked = () => {
+    executeSubTodoIsCompleteUpdate({
+      subtask: {
+        id: todo.id,
+        todoId: todo.todoId,
+        isCompleted: !checked,
+        task: subtask,
+      },
+      workspaceId,
+    });
+  };
+
+  const handleDelete = () => {
+    executeSubTodoDelete({ id: todo.id, todoId: todo.todoId, workspaceId });
+  };
+
+  useEffect(() => {
+    if (todo.id === editSubtask.subtaskId) enableInput();
+  }, [todo.id, editSubtask.subtaskId]);
+
   return (
-    <Draggable draggableId={todo.id} index={index}>
+    <Draggable
+      draggableId={todo.id}
+      index={index}
+      isDragDisabled={
+        isLoading || isUpdating || isDeleting || isCompleteUpdating
+      }
+    >
       {(provided) => (
         <li
           {...provided.draggableProps}
@@ -64,12 +160,20 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
             <Checkbox
               className="h-4 w-4"
               checked={checked}
-              onCheckedChange={() => setChecked((prevCheck) => !prevCheck)}
+              onCheckedChange={toggleChecked}
+              disabled={isUpdating || isDeleting || isCompleteUpdating}
+              aria-disabled={isUpdating || isDeleting || isCompleteUpdating}
             />
           </Hint>
           <div className="flex justify-between items-center w-full cursor-default">
             {isEditing ? (
               <Input
+                disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
+                aria-disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
                 ref={inputRef}
                 onClick={enableInput}
                 onBlur={disableInput}
@@ -80,17 +184,23 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
               />
             ) : (
               <button
+                disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
+                aria-disabled={
+                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                }
                 onClick={enableInput}
                 className="flex items-center space-x-2 cursor-text"
               >
                 <p className={cn("text-sm", checked && "line-through")}>
-                  {todo.task}
+                  {subtask}
                 </p>
               </button>
             )}
 
             <Hint description="Delete Subtask" side="left" sideOffset={5}>
-              <button type="button">
+              <button type="button" onClick={handleDelete}>
                 <Trash2 className="h-4 w-4 text-destructive/80 hover:text-destructive transition" />
               </button>
             </Hint>
