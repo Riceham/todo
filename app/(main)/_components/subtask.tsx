@@ -21,7 +21,7 @@ type SubtaskProps = {
 };
 
 export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(todo.isCompleted);
   const editSubtask = useEditSubtask();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -42,6 +42,20 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
     }
   );
 
+  const { execute: executeSubTodoIsCompleteUpdate, isLoading: isUpdating } =
+    useAction(updateSubTodo, {
+      onSuccess: (data) => {
+        toast.success(
+          data.isCompleted ? "Marked as completed." : "Marked as pending."
+        );
+
+        setChecked(data.isCompleted);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    });
+
   const enableInput = () => {
     setSubtask(subtask);
     setIsEditing(true);
@@ -59,7 +73,7 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
       subtask: {
         id: todo.id,
         todoId: todo.todoId,
-        isCompleted: todo.isCompleted,
+        isCompleted: checked,
         task: subtask,
       },
       workspaceId,
@@ -76,12 +90,28 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
     if (e.key === "Enter") disableInput();
   };
 
+  const toggleChecked = () => {
+    executeSubTodoIsCompleteUpdate({
+      subtask: {
+        id: todo.id,
+        todoId: todo.todoId,
+        isCompleted: !checked,
+        task: subtask,
+      },
+      workspaceId,
+    });
+  };
+
   useEffect(() => {
     if (todo.id === editSubtask.subtaskId) enableInput();
   }, [todo.id, editSubtask.subtaskId]);
 
   return (
-    <Draggable draggableId={todo.id} index={index}>
+    <Draggable
+      draggableId={todo.id}
+      index={index}
+      isDragDisabled={isLoading || isUpdating}
+    >
       {(provided) => (
         <li
           {...provided.draggableProps}
@@ -101,14 +131,16 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
             <Checkbox
               className="h-4 w-4"
               checked={checked}
-              onCheckedChange={() => setChecked((prevCheck) => !prevCheck)}
+              onCheckedChange={toggleChecked}
+              disabled={isUpdating}
+              aria-disabled={isUpdating}
             />
           </Hint>
           <div className="flex justify-between items-center w-full cursor-default">
             {isEditing ? (
               <Input
-                disabled={isLoading}
-                aria-disabled={isLoading}
+                disabled={isLoading || isUpdating}
+                aria-disabled={isLoading || isUpdating}
                 ref={inputRef}
                 onClick={enableInput}
                 onBlur={disableInput}
@@ -119,8 +151,8 @@ export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
               />
             ) : (
               <button
-                disabled={isLoading}
-                aria-disabled={isLoading}
+                disabled={isLoading || isUpdating}
+                aria-disabled={isLoading || isUpdating}
                 onClick={enableInput}
                 className="flex items-center space-x-2 cursor-text"
               >
