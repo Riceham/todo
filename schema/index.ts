@@ -60,3 +60,13 @@ export const UpdateTodoOrder = z.object({
   ),
   workspaceId: z.string(),
 });
+
+export const UpdateTodo = z.object({
+  todo: z.object({
+    id: z.string(),
+    workspaceId: z.string(),
+    task: z.string(),
+    description: z.string().optional(),
+    isCompleted: z.boolean().optional(),
+  }),
+});

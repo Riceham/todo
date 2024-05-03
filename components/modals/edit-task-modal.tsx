@@ -30,6 +30,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useEditTask } from "@/hooks/use-edit-task";
 import { SubTaskList } from "@/app/(main)/_components/subtask-list";
+import { useAction } from "@/hooks/use-action";
+import { updateTodo } from "@/actions/update-todo";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   task: z
@@ -51,6 +54,14 @@ const formSchema = z.object({
 export function EditTaskModal() {
   const { isOpen, onClose, task } = useEditTask();
   const [updatedSubtasks, setUpdatedSubtasks] = useState(task.subtasks);
+  const { execute, isLoading } = useAction(updateTodo, {
+    onSuccess: (data) => {
+      toast.success(`Todo updated.`);
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -60,10 +71,15 @@ export function EditTaskModal() {
     },
   });
 
-  const isLoading = form.formState.isSubmitting;
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    execute({
+      todo: {
+        id: task.id,
+        workspaceId: task.workspaceId,
+        task: values.task.trim(),
+        description: (values.description || "").trim(),
+      },
+    });
   };
 
   const handleClose = () => {
