@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { TaskList } from "@/app/(main)/_components/task-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,8 +28,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { SUBTASKS } from "@/constants";
 import { useEditTask } from "@/hooks/use-edit-task";
+import { SubTaskList } from "@/app/(main)/_components/subtask-list";
 
 const formSchema = z.object({
   task: z
@@ -51,7 +50,7 @@ const formSchema = z.object({
 
 export function EditTaskModal() {
   const { isOpen, onClose, task } = useEditTask();
-  const [updatedSubtasks, setUpdatedSubtasks] = useState(SUBTASKS);
+  const [updatedSubtasks, setUpdatedSubtasks] = useState(task.subtasks);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -75,9 +74,13 @@ export function EditTaskModal() {
   const isTaskCompleted = false;
 
   useEffect(() => {
+    setUpdatedSubtasks(task.subtasks);
+  }, [task.subtasks]);
+
+  useEffect(() => {
     form.setValue("task", task.task);
-    // TODO: set task description if exists
-  }, [form, task.task]);
+    form.setValue("description", task?.description || "");
+  }, [form, task.task, task.description]);
 
   return (
     <Sheet open={isOpen || isLoading} onOpenChange={handleClose}>
@@ -182,15 +185,17 @@ export function EditTaskModal() {
               <Separator />
             </SheetHeader>
             <ScrollArea className="flex-1 mb-5 pr-2 max-h-48 overflow-y-auto scrollbar">
-              {/* TODO: replace later with `updatedSubtasks.length === 0` */}
-              {false ? (
+              {updatedSubtasks.length === 0 ? (
                 <div className="flex items-center justify-center">
                   <h3>
                     No <strong className="text-primary">Subtasks</strong> found.
                   </h3>
                 </div>
               ) : (
-                <TaskList todos={updatedSubtasks} type="subtasks" />
+                <SubTaskList
+                  todos={updatedSubtasks}
+                  workspaceId={task.workspaceId}
+                />
               )}
             </ScrollArea>
 

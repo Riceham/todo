@@ -1,6 +1,5 @@
 "use client";
 
-import type { Todo, Workspace } from "@prisma/client";
 import { CalendarDays, Loader2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -9,13 +8,12 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAction } from "@/hooks/use-action";
 import { useEditTask } from "@/hooks/use-edit-task";
+import type { WorkspaceWithTodosWithSubTasks } from "@/types/workspace";
 
 import { TaskList } from "./task-list";
 
 type TaskListWrapperProps = {
-  workspace: Workspace & {
-    todos: Todo[];
-  };
+  workspace: WorkspaceWithTodosWithSubTasks;
 };
 
 export const TaskListWrapper = ({ workspace }: TaskListWrapperProps) => {

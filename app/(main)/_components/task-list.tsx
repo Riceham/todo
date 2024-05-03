@@ -1,28 +1,22 @@
 "use client";
 
 import { DragDropContext, type DropResult, Droppable } from "@hello-pangea/dnd";
-import type { Todo } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { updateTodoOrder } from "@/actions/update-todo-order";
 import { useAction } from "@/hooks/use-action";
 import { reorder } from "@/lib/utils";
+import type { TodoWithSubTasks } from "@/types/workspace";
 
-import { Subtask } from "./subtask";
 import { Task } from "./task";
 
 type TaskListProps = {
-  todos: Todo[];
-  type?: "subtasks" | "tasks";
+  todos: TodoWithSubTasks[];
   workspaceId: string;
 };
 
-export const TaskList = ({
-  workspaceId,
-  todos,
-  type = "tasks",
-}: TaskListProps) => {
+export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
   const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
     useAction(updateTodoOrder, {
@@ -76,18 +70,14 @@ export const TaskList = ({
             ref={provided.innerRef}
             className="space-y-3"
           >
-            {orderedTodos.map((todo, i) => {
-              return type === "tasks" ? (
-                <Task
-                  key={todo.id}
-                  index={i}
-                  todo={todo}
-                  isLoading={isTaskLoading}
-                />
-              ) : (
-                <Subtask key={todo.id} index={i} todo={todo} />
-              );
-            })}
+            {orderedTodos.map((todo, i) => (
+              <Task
+                key={todo.id}
+                index={i}
+                todo={todo}
+                isLoading={isTaskLoading}
+              />
+            ))}
 
             {provided.placeholder}
           </ul>

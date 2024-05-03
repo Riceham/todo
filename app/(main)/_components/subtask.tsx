@@ -1,6 +1,7 @@
 "use client";
 
 import { Draggable } from "@hello-pangea/dnd";
+import type { SubTask } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -10,10 +11,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type SubtaskProps = {
-  todo: {
-    id: string;
-    task: string;
-  };
+  todo: SubTask;
   index: number;
 };
 

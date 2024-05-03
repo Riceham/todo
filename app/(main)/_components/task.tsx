@@ -10,15 +10,16 @@ import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEditTask } from "@/hooks/use-edit-task";
 import { cn } from "@/lib/utils";
+import { TodoWithSubTasks } from "@/types/workspace";
 
 type TaskProps = {
-  todo: Todo;
+  todo: TodoWithSubTasks;
   index: number;
   isLoading: boolean;
 };
 
 export const Task = ({ todo, index, isLoading }: TaskProps) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(todo.isCompleted);
   const editTask = useEditTask();
 
   const handleClick = () => {
