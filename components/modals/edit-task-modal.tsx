@@ -110,8 +110,6 @@ export function EditTaskModal() {
     onClose();
   };
 
-  const isTaskCompleted = false;
-
   useEffect(() => {
     setUpdatedSubtasks(task.subtasks);
   }, [task.subtasks]);
@@ -130,9 +128,9 @@ export function EditTaskModal() {
             Edit Task
             <Badge
               className="ml-2"
-              variant={isTaskCompleted ? "success" : "default"}
+              variant={task.isCompleted ? "success" : "default"}
             >
-              {isTaskCompleted ? "Completed" : "Pending"}
+              {task.isCompleted ? "Completed" : "Pending"}
             </Badge>
           </SheetTitle>
           <Separator />
