@@ -80,6 +80,8 @@ export const DeleteTodo = z.object({
   }),
 });
 
+/* ============== SUBTASK/SUBTODO ============== */
+
 export const CreateSubTodo = z.object({
   workspaceId: z.string().min(1, {
     message: "Workspace id is required.",
@@ -90,4 +92,14 @@ export const CreateSubTodo = z.object({
   name: z.string().min(1, {
     message: "Subtask name is required.",
   }),
+});
+
+export const UpdateSubTodo = z.object({
+  subtask: z.object({
+    id: z.string(),
+    todoId: z.string(),
+    task: z.string(),
+    isCompleted: z.boolean(),
+  }),
+  workspaceId: z.string(),
 });

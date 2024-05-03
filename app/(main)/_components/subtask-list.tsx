@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import { updateTodoOrder } from "@/actions/update-todo-order";
 import { useAction } from "@/hooks/use-action";
-import { useEditSubtask } from "@/hooks/use-edit-subtask";
 import { reorder } from "@/lib/utils";
 
 import { Subtask } from "./subtask";
@@ -20,7 +19,6 @@ type TaskListProps = {
 
 export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
-  const editSubtask = useEditSubtask();
   const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
     useAction(updateTodoOrder, {
       onSuccess: () => {
@@ -74,7 +72,12 @@ export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
             className="space-y-3"
           >
             {orderedTodos.map((todo, i) => (
-              <Subtask key={todo.id} index={i} todo={todo} />
+              <Subtask
+                key={todo.id}
+                index={i}
+                todo={todo}
+                workspaceId={workspaceId}
+              />
             ))}
 
             {provided.placeholder}

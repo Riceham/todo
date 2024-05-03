@@ -4,24 +4,43 @@ import { Draggable } from "@hello-pangea/dnd";
 import type { SubTask } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
+import { updateSubTodo } from "@/actions/update-subtodo";
 import { Hint } from "@/components/hint";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { useAction } from "@/hooks/use-action";
 import { useEditSubtask } from "@/hooks/use-edit-subtask";
 import { cn } from "@/lib/utils";
 
 type SubtaskProps = {
   todo: SubTask;
   index: number;
+  workspaceId: string;
 };
 
-export const Subtask = ({ todo, index }: SubtaskProps) => {
+export const Subtask = ({ todo, index, workspaceId }: SubtaskProps) => {
   const [checked, setChecked] = useState(false);
   const editSubtask = useEditSubtask();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
+
+  const { execute: executeSubTodoUpdate, isLoading } = useAction(
+    updateSubTodo,
+    {
+      onSuccess: (data) => {
+        toast.success("Subtask updated.");
+
+        setSubtask(data.task);
+        setIsEditing(false);
+      },
+      onError: (error) => {
+        toast.error(error);
+      },
+    }
+  );
 
   const enableInput = () => {
     setSubtask(subtask);
@@ -34,7 +53,17 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
   };
 
   const disableInput = () => {
-    setIsEditing(false);
+    if (subtask === todo.task) return setIsEditing(false);
+
+    executeSubTodoUpdate({
+      subtask: {
+        id: todo.id,
+        todoId: todo.todoId,
+        isCompleted: todo.isCompleted,
+        task: subtask,
+      },
+      workspaceId,
+    });
 
     editSubtask.setSubtaskId("");
   };
@@ -78,6 +107,8 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
           <div className="flex justify-between items-center w-full cursor-default">
             {isEditing ? (
               <Input
+                disabled={isLoading}
+                aria-disabled={isLoading}
                 ref={inputRef}
                 onClick={enableInput}
                 onBlur={disableInput}
@@ -88,11 +119,13 @@ export const Subtask = ({ todo, index }: SubtaskProps) => {
               />
             ) : (
               <button
+                disabled={isLoading}
+                aria-disabled={isLoading}
                 onClick={enableInput}
                 className="flex items-center space-x-2 cursor-text"
               >
                 <p className={cn("text-sm", checked && "line-through")}>
-                  {todo.task}
+                  {subtask}
                 </p>
               </button>
             )}
