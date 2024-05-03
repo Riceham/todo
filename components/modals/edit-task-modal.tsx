@@ -122,6 +122,10 @@ export function EditTaskModal() {
     });
   };
 
+  useEffect(() => {
+    setUpdatedSubtasks(task.subtasks);
+  }, [task.subtasks]);
+
   const onDelete = () => {
     executeTodoDelete({ id: task.id, workspaceId: task.workspaceId });
   };
