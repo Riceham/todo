@@ -57,6 +57,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         task: name,
         order: newOrder,
       },
+      include: {
+        subtasks: {
+          orderBy: {
+            order: "asc",
+          },
+        },
+      },
     });
   } catch (error) {
     return {
