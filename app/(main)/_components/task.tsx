@@ -59,7 +59,7 @@ export const Task = ({ todo, index, isLoading }: TaskProps) => {
   };
 
   useEffect(() => {
-    editTask.setTask(todo);
+    if (editTask.task.id === todo.id) editTask.setTask(todo);
   }, [todo]);
 
   return (

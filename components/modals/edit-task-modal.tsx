@@ -122,10 +122,6 @@ export function EditTaskModal() {
     });
   };
 
-  useEffect(() => {
-    setUpdatedSubtasks(task.subtasks);
-  }, [task.subtasks]);
-
   const onDelete = () => {
     executeTodoDelete({ id: task.id, workspaceId: task.workspaceId });
   };
@@ -147,6 +143,10 @@ export function EditTaskModal() {
     form.setValue("task", task.task);
     form.setValue("description", task?.description || "");
   }, [form, task.task, task.description]);
+
+  useEffect(() => {
+    setUpdatedSubtasks(task.subtasks);
+  }, [task.subtasks]);
 
   return (
     <Sheet
