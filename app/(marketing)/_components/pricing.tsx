@@ -1,7 +1,6 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -11,9 +10,27 @@ import { FREQUENCIES, TIERS } from "@/constants";
 import { cn } from "@/lib/utils";
 
 import styles from "@/pricing.module.css";
+import { useRouter } from "next/navigation";
 
-export const Pricing = () => {
+type PricingProps = {
+  isSubscribed: boolean;
+  isLoggedIn: boolean;
+};
+
+export const Pricing = ({ isSubscribed, isLoggedIn }: PricingProps) => {
   const [frequency, setFrequency] = useState(FREQUENCIES[0]);
+  const router = useRouter();
+
+  const handleSubscribe = (tier: (typeof TIERS)[number]) => {
+    if (tier.soldOut) return;
+    if (!isLoggedIn) router.push("/sign-in");
+
+    if (tier.id === "0") router.push("/dashboard");
+
+    if (tier.id === "1") {
+      console.log("Upgrade!");
+    }
+  };
 
   return (
     <div
@@ -112,27 +129,12 @@ export const Pricing = () => {
                       tier.featured
                         ? "text-white dark:text-black"
                         : "text-black dark:text-white",
-                      "text-4xl font-bold tracking-tight",
-                      tier.discountPrice &&
-                        tier.discountPrice[frequency.value] &&
-                        "line-through"
+                      "text-4xl font-bold tracking-tight"
                     )}
                   >
                     {typeof tier.price === "string"
                       ? tier.price
-                      : tier.price[frequency.value]}
-                  </span>
-
-                  <span
-                    className={cn(
-                      tier.featured
-                        ? "text-white dark:text-black"
-                        : "text-black dark:text-white"
-                    )}
-                  >
-                    {typeof tier.discountPrice === "string"
-                      ? tier.discountPrice
-                      : tier.discountPrice[frequency.value]}
+                      : tier.price[frequency.value as keyof {}]}
                   </span>
 
                   {typeof tier.price !== "string" ? (
@@ -153,7 +155,7 @@ export const Pricing = () => {
                   disabled={tier.soldOut}
                   aria-disabled={tier.soldOut}
                   className={cn(
-                    "w-full text-black dark:text-white",
+                    "w-full text-black dark:text-white mt-6",
                     !tier.highlighted && !tier.featured
                       ? "bg-gray-100 dark:bg-gray-600"
                       : "bg-slate-300 hover:bg-slate-400 dark:bg-slate-600 dark:hover:bg-slate-700",
@@ -162,15 +164,19 @@ export const Pricing = () => {
                       : "hover:opacity-80 transition-opacity"
                   )}
                   variant={tier.highlighted ? "default" : "outline"}
-                  asChild
+                  onClick={() => handleSubscribe(tier)}
                 >
-                  <Link
-                    href={tier.href}
-                    aria-describedby={tier.id}
-                    className="flex mt-6 shadow-sm"
-                  >
-                    {tier.soldOut ? "Sold out" : tier.cta}
-                  </Link>
+                  {tier.soldOut && "Sold out"}
+                  {tier.id === "0" && !tier.soldOut
+                    ? isLoggedIn
+                      ? "Dashboard"
+                      : "Sign up"
+                    : null}
+                  {tier.id === "1" && !tier.soldOut
+                    ? isSubscribed
+                      ? "Manage"
+                      : "Upgrade"
+                    : null}
                 </Button>
 
                 <ul

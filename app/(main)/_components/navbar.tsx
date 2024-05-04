@@ -10,7 +10,7 @@ import {
   Settings,
   Settings2,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
@@ -34,22 +34,29 @@ type NavbarProps = {
   isCollapsed: boolean;
   onResetWidth: () => void;
   workspaces: Workspace[];
+  isSubscribed: boolean;
 };
 
 export const Navbar = ({
   isCollapsed,
   onResetWidth,
   workspaces,
+  isSubscribed,
 }: NavbarProps) => {
   const params = useParams();
+  const router = useRouter();
   const settings = useSettings();
   const profile = useProfile();
   const { isLoaded, isSignedIn, user } = useUser();
-  const isSubscribed = true;
 
   if (!isLoaded || !isSignedIn) {
     return null;
   }
+
+  const handleSubscribe = () => {
+    if (isSubscribed) {
+    } else router.push("/#pricing");
+  };
 
   return (
     <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4 shadow-lg border-b-2">
@@ -101,7 +108,7 @@ export const Navbar = ({
                   <CircleUserRound className="h-4 w-4 mr-1 text-primary" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSubscribe}>
                   {isSubscribed ? (
                     <>
                       <Settings2 className="h-4 w-4 mr-1 text-primary" />
