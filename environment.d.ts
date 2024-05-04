@@ -10,6 +10,9 @@ declare global {
 
       // public base url
       NEXT_PUBLIC_APP_BASE_URL: string;
+
+      // stripe api key
+      STRIPE_API_KEY: string;
     }
   }
 }
