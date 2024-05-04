@@ -1,16 +1,19 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
+import { stripeRedirect } from "@/actions/stripe-redirect";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FREQUENCIES, TIERS } from "@/constants";
+import { useAction } from "@/hooks/use-action";
 import { cn } from "@/lib/utils";
 
 import styles from "@/pricing.module.css";
-import { useRouter } from "next/navigation";
 
 type PricingProps = {
   isSubscribed: boolean;
@@ -21,6 +24,16 @@ export const Pricing = ({ isSubscribed, isLoggedIn }: PricingProps) => {
   const [frequency, setFrequency] = useState(FREQUENCIES[0]);
   const router = useRouter();
 
+  const { execute, isLoading } = useAction(stripeRedirect, {
+    onSuccess: (data) => {
+      toast.loading("Redirecting to checkout...");
+      window.location.href = data;
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
   const handleSubscribe = (tier: (typeof TIERS)[number]) => {
     if (tier.soldOut) return;
     if (!isLoggedIn) router.push("/sign-in");
@@ -28,7 +41,9 @@ export const Pricing = ({ isSubscribed, isLoggedIn }: PricingProps) => {
     if (tier.id === "0") router.push("/dashboard");
 
     if (tier.id === "1") {
-      console.log("Upgrade!");
+      const interval = frequency.id === "1" ? "month" : "year";
+
+      execute({ interval });
     }
   };
 
@@ -152,8 +167,8 @@ export const Pricing = ({ isSubscribed, isLoggedIn }: PricingProps) => {
                 </p>
                 <Button
                   size="lg"
-                  disabled={tier.soldOut}
-                  aria-disabled={tier.soldOut}
+                  disabled={tier.soldOut || isLoading}
+                  aria-disabled={tier.soldOut || isLoading}
                   className={cn(
                     "w-full text-black dark:text-white mt-6",
                     !tier.highlighted && !tier.featured
