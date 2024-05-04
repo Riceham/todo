@@ -59,7 +59,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
               },
               unit_amount: interval === "month" ? 1200 : 9499,
               recurring: {
-                interval,
+                interval: interval || "month",
               },
             },
             quantity: 1,

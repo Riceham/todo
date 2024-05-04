@@ -132,5 +132,5 @@ export const UpdateSubTodoOrder = z.object({
 });
 
 export const StripeRedirect = z.object({
-  interval: z.enum(["month", "year"]),
+  interval: z.enum(["month", "year"]).optional(),
 });

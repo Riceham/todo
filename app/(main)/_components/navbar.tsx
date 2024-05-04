@@ -11,7 +11,9 @@ import {
   Settings2,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
+import { stripeRedirect } from "@/actions/stripe-redirect";
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAction } from "@/hooks/use-action";
 import { useProfile } from "@/hooks/use-profile";
 import { useSettings } from "@/hooks/use-settings";
 
@@ -49,13 +52,24 @@ export const Navbar = ({
   const profile = useProfile();
   const { isLoaded, isSignedIn, user } = useUser();
 
+  const { execute, isLoading } = useAction(stripeRedirect, {
+    onSuccess: (data) => {
+      toast.dismiss();
+      window.location.href = data;
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
   if (!isLoaded || !isSignedIn) {
     return null;
   }
 
   const handleSubscribe = () => {
     if (isSubscribed) {
-      console.log("TODO: Redirect to Manage Subscription");
+      execute({});
+      toast.loading("Redirecting...");
     } else router.push("/#pricing");
   };
 
@@ -109,7 +123,11 @@ export const Navbar = ({
                   <CircleUserRound className="h-4 w-4 mr-1 text-primary" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSubscribe}>
+                <DropdownMenuItem
+                  onClick={handleSubscribe}
+                  disabled={isLoading}
+                  aria-disabled={isLoading}
+                >
                   {isSubscribed ? (
                     <>
                       <Settings2 className="h-4 w-4 mr-1 text-primary" />

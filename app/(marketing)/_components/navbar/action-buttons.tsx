@@ -9,9 +9,12 @@ import {
   Settings2,
 } from "lucide-react";
 import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { stripeRedirect } from "@/actions/stripe-redirect";
+import { Button } from "@/components/ui/button";
+import { useAction } from "@/hooks/use-action";
 
 type ActionButtonsProps = {
   isSubscribed: boolean;
@@ -20,9 +23,20 @@ type ActionButtonsProps = {
 export const ActionButtons = ({ isSubscribed }: ActionButtonsProps) => {
   const router = useRouter();
 
+  const { execute, isLoading } = useAction(stripeRedirect, {
+    onSuccess: (data) => {
+      toast.dismiss();
+      window.location.href = data;
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
   const handleSubscribe = () => {
     if (isSubscribed) {
-      console.log("TODO: Redirect to Manage Subscription");
+      execute({});
+      toast.loading("Redirecting...");
     } else {
       router.push("/#pricing");
     }
@@ -31,13 +45,22 @@ export const ActionButtons = ({ isSubscribed }: ActionButtonsProps) => {
   return (
     <div className="flex items-center gap-x-2">
       <SignedIn>
-        <Button variant="outline" asChild>
+        <Button
+          variant="outline"
+          disabled={isLoading}
+          aria-disabled={isLoading}
+          asChild
+        >
           <Link href="/dashboard">
             <CircleGauge className="h-4 w-4 mr-1" />
             Dashboard
           </Link>
         </Button>
-        <Button onClick={handleSubscribe}>
+        <Button
+          onClick={handleSubscribe}
+          disabled={isLoading}
+          aria-disabled={isLoading}
+        >
           {isSubscribed ? (
             <>
               <Settings2 className="h-4 w-4 mr-1" />
