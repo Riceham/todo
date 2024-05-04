@@ -55,6 +55,7 @@ export const Navbar = ({
 
   const handleSubscribe = () => {
     if (isSubscribed) {
+      console.log("TODO: Redirect to Manage Subscription");
     } else router.push("/#pricing");
   };
 
