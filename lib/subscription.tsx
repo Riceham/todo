@@ -8,7 +8,7 @@ export const checkSubscription = async () => {
 
   if (!userId) return false;
 
-  const orgSubscription = await db.userSubscription.findUnique({
+  const userSubscription = await db.userSubscription.findUnique({
     where: {
       userId,
     },
@@ -20,11 +20,12 @@ export const checkSubscription = async () => {
     },
   });
 
-  if (!orgSubscription) return false;
+  if (!userSubscription) return false;
 
   const isValid =
-    orgSubscription.stripePriceId &&
-    orgSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now();
+    userSubscription.stripePriceId &&
+    userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS >
+      Date.now();
 
   return !!isValid;
 };
