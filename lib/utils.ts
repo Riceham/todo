@@ -12,3 +12,7 @@ export function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 
   return result;
 }
+
+export function absoluteUrl(path: string) {
+  return `${process.env.NEXT_PUBLIC_APP_BASE_URL}${path}`;
+}

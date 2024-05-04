@@ -130,3 +130,7 @@ export const UpdateSubTodoOrder = z.object({
   workspaceId: z.string(),
   todoId: z.string(),
 });
+
+export const StripeRedirect = z.object({
+  interval: z.enum(["month", "year"]).optional(),
+});

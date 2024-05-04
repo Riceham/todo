@@ -20,9 +20,10 @@ import { WorkspaceList } from "./workspace-list";
 
 type NavigationProps = {
   workspaces: Workspace[];
+  isSubscribed: boolean;
 };
 
-export const Navigation = ({ workspaces }: NavigationProps) => {
+export const Navigation = ({ workspaces, isSubscribed }: NavigationProps) => {
   const pathname = usePathname();
   const params = useParams();
   const settings = useSettings();
@@ -222,6 +223,7 @@ export const Navigation = ({ workspaces }: NavigationProps) => {
           isCollapsed={isCollapsed}
           onResetWidth={resetWidth}
           workspaces={workspaces}
+          isSubscribed={isSubscribed}
         />
       </div>
     </>

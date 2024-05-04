@@ -10,8 +10,10 @@ import {
   Settings,
   Settings2,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
+import { stripeRedirect } from "@/actions/stripe-redirect";
 import { Hint } from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAction } from "@/hooks/use-action";
 import { useProfile } from "@/hooks/use-profile";
 import { useSettings } from "@/hooks/use-settings";
 
@@ -34,22 +37,41 @@ type NavbarProps = {
   isCollapsed: boolean;
   onResetWidth: () => void;
   workspaces: Workspace[];
+  isSubscribed: boolean;
 };
 
 export const Navbar = ({
   isCollapsed,
   onResetWidth,
   workspaces,
+  isSubscribed,
 }: NavbarProps) => {
   const params = useParams();
+  const router = useRouter();
   const settings = useSettings();
   const profile = useProfile();
   const { isLoaded, isSignedIn, user } = useUser();
-  const isSubscribed = true;
+
+  const { execute, isLoading } = useAction(stripeRedirect, {
+    onSuccess: (data) => {
+      toast.dismiss();
+      window.location.href = data;
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   if (!isLoaded || !isSignedIn) {
     return null;
   }
+
+  const handleSubscribe = () => {
+    if (isSubscribed) {
+      execute({});
+      toast.loading("Redirecting...");
+    } else router.push("/#pricing");
+  };
 
   return (
     <nav className="bg-background px-4 py-2 w-full flex items-center gap-x-4 shadow-lg border-b-2">
@@ -101,7 +123,11 @@ export const Navbar = ({
                   <CircleUserRound className="h-4 w-4 mr-1 text-primary" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleSubscribe}
+                  disabled={isLoading}
+                  aria-disabled={isLoading}
+                >
                   {isSubscribed ? (
                     <>
                       <Settings2 className="h-4 w-4 mr-1 text-primary" />
