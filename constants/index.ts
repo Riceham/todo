@@ -3661,13 +3661,16 @@ export const FREQUENCIES: PricingTierFrequency[] = [
   },
 ];
 
-export const TIERS =  [
+export const MAX_FREE_WORKSPACES = 1;
+export const MAX_FREE_TASKS = 3;
+
+export const TIERS = [
   {
     name: "Free",
     id: "0",
     price: { "1": "$0", "2": "$0" },
     description: "Get a taste of CountWave, no credit card required.",
-    features: ["1 Workspace", "3 Tasks"],
+    features: [`${MAX_FREE_WORKSPACES} Workspace`, `${MAX_FREE_TASKS} Tasks`],
     featured: false,
     highlighted: true,
     soldOut: false,
@@ -3686,4 +3689,4 @@ export const TIERS =  [
     highlighted: false,
     soldOut: false,
   },
-]
+];
