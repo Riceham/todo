@@ -15,9 +15,15 @@ type TaskListProps = {
   todos: SubTask[];
   workspaceId: string;
   todoId: string;
+  isPreview?: boolean;
 };
 
-export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
+export const SubTaskList = ({
+  workspaceId,
+  todos,
+  todoId,
+  isPreview = false,
+}: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
   const { execute: executeUpdateSubTodoOrder, isLoading: isTaskLoading } =
     useAction(updateSubTodoOrder, {
@@ -30,6 +36,8 @@ export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
     });
 
   const onDragEnd = (result: DropResult) => {
+    if (isPreview) return;
+
     const { destination, source, type } = result;
 
     // if no destination
@@ -63,7 +71,7 @@ export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
         droppableId="lists"
         type="card"
         direction="vertical"
-        isDropDisabled={isTaskLoading}
+        isDropDisabled={isTaskLoading || isPreview}
       >
         {(provided) => (
           <ul
@@ -77,6 +85,7 @@ export const SubTaskList = ({ workspaceId, todos, todoId }: TaskListProps) => {
                 index={i}
                 todo={todo}
                 isLoading={isTaskLoading}
+                isPreview={isPreview}
                 workspaceId={workspaceId}
               />
             ))}

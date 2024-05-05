@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Copy, Globe, LinkIcon, RefreshCw, Share2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { Hint } from "@/components/hint";
@@ -72,6 +72,11 @@ export const ShareModal = () => {
       setIsCopied(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    setIsPublic(workspace?.isPublic);
+    setPublicId(workspace?.publicId);
+  }, [workspace?.isPublic, workspace?.publicId]);
 
   return (
     <Dialog open={isOpen || isLoading} onOpenChange={onClose}>

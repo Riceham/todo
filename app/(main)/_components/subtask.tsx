@@ -3,7 +3,6 @@
 import { Draggable } from "@hello-pangea/dnd";
 import type { SubTask } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -21,6 +20,7 @@ type SubtaskProps = {
   index: number;
   workspaceId: string;
   isLoading: boolean;
+  isPreview?: boolean;
 };
 
 export const Subtask = ({
@@ -28,10 +28,10 @@ export const Subtask = ({
   index,
   workspaceId,
   isLoading,
+  isPreview = false,
 }: SubtaskProps) => {
   const [checked, setChecked] = useState(todo.isCompleted);
   const editSubtask = useEditSubtask();
-  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [subtask, setSubtask] = useState(todo.task || "Untitled Subtask");
@@ -80,6 +80,8 @@ export const Subtask = ({
   );
 
   const enableInput = () => {
+    if (isPreview) return;
+
     setSubtask(subtask);
     setIsEditing(true);
 
@@ -90,7 +92,7 @@ export const Subtask = ({
   };
 
   const disableInput = () => {
-    if (subtask === todo.task) return setIsEditing(false);
+    if (subtask === todo.task || isPreview) return setIsEditing(false);
 
     executeSubTodoUpdate({
       subtask: {
@@ -114,6 +116,8 @@ export const Subtask = ({
   };
 
   const toggleChecked = () => {
+    if (isPreview) return;
+
     executeSubTodoIsCompleteUpdate({
       subtask: {
         id: todo.id,
@@ -126,6 +130,8 @@ export const Subtask = ({
   };
 
   const handleDelete = () => {
+    if (isPreview) return;
+
     executeSubTodoDelete({ id: todo.id, todoId: todo.todoId, workspaceId });
   };
 
@@ -138,7 +144,7 @@ export const Subtask = ({
       draggableId={todo.id}
       index={index}
       isDragDisabled={
-        isLoading || isUpdating || isDeleting || isCompleteUpdating
+        isLoading || isUpdating || isDeleting || isCompleteUpdating || isPreview
       }
     >
       {(provided) => (
@@ -148,10 +154,13 @@ export const Subtask = ({
           ref={provided.innerRef}
           className={cn(
             "flex space-x-2 items-center p-2 dark:bg-gray-800 bg-gray-100 hover:bg-gray-200 rounded-md select-none shadow transition dark:hover:bg-gray-700",
-            checked && "opacity-50 hover:opacity-60"
+            checked && "opacity-50 hover:opacity-60",
+            isPreview && "cursor-default"
           )}
         >
-          <GripVertical className="h-4 w-4 opacity-80 hover:opacity-100 transition" />
+          {!isPreview && (
+            <GripVertical className="h-4 w-4 opacity-80 hover:opacity-100 transition" />
+          )}
           <Hint
             description={checked ? "Mark as pending" : "Mark as complete"}
             side="right"
@@ -161,18 +170,30 @@ export const Subtask = ({
               className="h-4 w-4"
               checked={checked}
               onCheckedChange={toggleChecked}
-              disabled={isUpdating || isDeleting || isCompleteUpdating}
-              aria-disabled={isUpdating || isDeleting || isCompleteUpdating}
+              disabled={
+                isUpdating || isDeleting || isCompleteUpdating || isPreview
+              }
+              aria-disabled={
+                isUpdating || isDeleting || isCompleteUpdating || isPreview
+              }
             />
           </Hint>
           <div className="flex justify-between items-center w-full cursor-default">
             {isEditing ? (
               <Input
                 disabled={
-                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                  isLoading ||
+                  isUpdating ||
+                  isDeleting ||
+                  isCompleteUpdating ||
+                  isPreview
                 }
                 aria-disabled={
-                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                  isLoading ||
+                  isUpdating ||
+                  isDeleting ||
+                  isCompleteUpdating ||
+                  isPreview
                 }
                 ref={inputRef}
                 onClick={enableInput}
@@ -185,10 +206,18 @@ export const Subtask = ({
             ) : (
               <button
                 disabled={
-                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                  isLoading ||
+                  isUpdating ||
+                  isDeleting ||
+                  isCompleteUpdating ||
+                  isPreview
                 }
                 aria-disabled={
-                  isLoading || isUpdating || isDeleting || isCompleteUpdating
+                  isLoading ||
+                  isUpdating ||
+                  isDeleting ||
+                  isCompleteUpdating ||
+                  isPreview
                 }
                 onClick={enableInput}
                 className="flex items-center space-x-2 cursor-text"
@@ -199,11 +228,13 @@ export const Subtask = ({
               </button>
             )}
 
-            <Hint description="Delete Subtask" side="left" sideOffset={5}>
-              <button type="button" onClick={handleDelete}>
-                <Trash2 className="h-4 w-4 text-destructive/80 hover:text-destructive transition" />
-              </button>
-            </Hint>
+            {!isPreview && (
+              <Hint description="Delete Subtask" side="left" sideOffset={5}>
+                <button type="button" onClick={handleDelete}>
+                  <Trash2 className="h-4 w-4 text-destructive/80 hover:text-destructive transition" />
+                </button>
+              </Hint>
+            )}
           </div>
         </li>
       )}

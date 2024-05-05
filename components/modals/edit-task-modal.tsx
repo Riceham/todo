@@ -56,7 +56,7 @@ const formSchema = z.object({
 });
 
 export function EditTaskModal() {
-  const { isOpen, onClose, task } = useEditTask();
+  const { isOpen, onClose, task, isPreview } = useEditTask();
   const editSubtask = useEditSubtask();
 
   const [updatedSubtasks, setUpdatedSubtasks] = useState(task.subtasks);
@@ -112,6 +112,8 @@ export function EditTaskModal() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (isPreview) return;
+
     executeTodoUpdate({
       todo: {
         id: task.id,
@@ -123,10 +125,14 @@ export function EditTaskModal() {
   };
 
   const onDelete = () => {
+    if (isPreview) return;
+
     executeTodoDelete({ id: task.id, workspaceId: task.workspaceId });
   };
 
   const handleNewSubtask = () => {
+    if (isPreview) return;
+
     executeSubtaskCreate({
       workspaceId: task.workspaceId,
       todoId: task.id,
@@ -194,8 +200,12 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Input
-                        disabled={isLoading || isDeleting || isCreating}
-                        aria-disabled={isLoading || isDeleting || isCreating}
+                        disabled={
+                          isLoading || isDeleting || isCreating || isPreview
+                        }
+                        aria-disabled={
+                          isLoading || isDeleting || isCreating || isPreview
+                        }
                         placeholder="Enter task name"
                         {...field}
                       />
@@ -217,8 +227,12 @@ export function EditTaskModal() {
 
                     <FormControl>
                       <Textarea
-                        disabled={isLoading || isDeleting || isCreating}
-                        aria-disabled={isLoading || isDeleting || isCreating}
+                        disabled={
+                          isLoading || isDeleting || isCreating || isPreview
+                        }
+                        aria-disabled={
+                          isLoading || isDeleting || isCreating || isPreview
+                        }
                         placeholder="Add a description..."
                         className="resize-none scrollbar h-36"
                         {...field}
@@ -240,15 +254,17 @@ export function EditTaskModal() {
                     ({updatedSubtasks.length})
                   </span>
                 </p>
-                <Button
-                  size="icon"
-                  onClick={handleNewSubtask}
-                  className="h-6 w-6"
-                  title="Add New Subtask"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span className="sr-only">Add New Subtask</span>
-                </Button>
+                {!isPreview && (
+                  <Button
+                    size="icon"
+                    onClick={handleNewSubtask}
+                    className="h-6 w-6"
+                    title="Add New Subtask"
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span className="sr-only">Add New Subtask</span>
+                  </Button>
+                )}
               </SheetTitle>
 
               <Separator />
@@ -265,6 +281,7 @@ export function EditTaskModal() {
                   todos={updatedSubtasks}
                   workspaceId={task.workspaceId}
                   todoId={task.id}
+                  isPreview={isPreview}
                 />
               )}
             </ScrollArea>
@@ -274,16 +291,20 @@ export function EditTaskModal() {
                 type="button"
                 onClick={onDelete}
                 variant="destructive"
-                disabled={isLoading || isDeleting || isCreating}
-                aria-disabled={isLoading || isDeleting || isCreating}
+                disabled={isLoading || isDeleting || isCreating || isPreview}
+                aria-disabled={
+                  isLoading || isDeleting || isCreating || isPreview
+                }
               >
                 <Trash2 className="h-5 w-5 mr-2" />
                 Delete Task
               </Button>
               <Button
                 type="submit"
-                disabled={isLoading || isDeleting || isCreating}
-                aria-disabled={isLoading || isDeleting || isCreating}
+                disabled={isLoading || isDeleting || isCreating || isPreview}
+                aria-disabled={
+                  isLoading || isDeleting || isCreating || isPreview
+                }
               >
                 <Save className="h-5 w-5 mr-2" />
                 Save Changes
