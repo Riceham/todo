@@ -14,9 +14,14 @@ import { Task } from "./task";
 type TaskListProps = {
   todos: TodoWithSubTasks[];
   workspaceId: string;
+  isPreview?: boolean;
 };
 
-export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
+export const TaskList = ({
+  workspaceId,
+  todos,
+  isPreview = false,
+}: TaskListProps) => {
   const [orderedTodos, setOrderedTodos] = useState(todos);
   const { execute: executeUpdateTodoOrder, isLoading: isTaskLoading } =
     useAction(updateTodoOrder, {
@@ -29,6 +34,8 @@ export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
     });
 
   const onDragEnd = (result: DropResult) => {
+    if (isPreview) return;
+
     const { destination, source, type } = result;
 
     // if no destination
@@ -62,7 +69,7 @@ export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
         droppableId="lists"
         type="card"
         direction="vertical"
-        isDropDisabled={isTaskLoading}
+        isDropDisabled={isTaskLoading || isPreview}
       >
         {(provided) => (
           <ul
@@ -76,6 +83,7 @@ export const TaskList = ({ workspaceId, todos }: TaskListProps) => {
                 index={i}
                 todo={todo}
                 isLoading={isTaskLoading}
+                isPreview={isPreview}
               />
             ))}
 

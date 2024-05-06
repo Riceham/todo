@@ -13,7 +13,7 @@ model Workspace {
   userId String
   name   String
 
-  publicId String  @default(uuid())
+  publicId String  @unique @default(uuid())
   isPublic Boolean @default(false)
 
   createdAt DateTime @default(now())

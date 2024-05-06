@@ -8,6 +8,8 @@ type EditTaskStore = {
   toggle: () => void;
   task: TodoWithSubTasks;
   setTask: (task: TodoWithSubTasks) => void;
+  isPreview: boolean;
+  showPreview: () => void;
 };
 
 const defaultTask: TodoWithSubTasks = {
@@ -25,8 +27,10 @@ const defaultTask: TodoWithSubTasks = {
 export const useEditTask = create<EditTaskStore>((set, get) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false, task: defaultTask }),
+  onClose: () => set({ isOpen: false, task: defaultTask, isPreview: false }),
   toggle: () => set({ isOpen: !get().isOpen }),
   task: defaultTask,
   setTask: (task) => set({ task }),
+  isPreview: false,
+  showPreview: () => set({ isPreview: true }),
 }));

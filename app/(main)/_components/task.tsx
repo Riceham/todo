@@ -18,9 +18,15 @@ type TaskProps = {
   todo: TodoWithSubTasks;
   index: number;
   isLoading: boolean;
+  isPreview?: boolean;
 };
 
-export const Task = ({ todo, index, isLoading }: TaskProps) => {
+export const Task = ({
+  todo,
+  index,
+  isLoading,
+  isPreview = false,
+}: TaskProps) => {
   const [checked, setChecked] = useState(todo.isCompleted);
   const editTask = useEditTask();
   const { execute: executeTodoUpdate, isLoading: isUpdating } = useAction(
@@ -43,10 +49,13 @@ export const Task = ({ todo, index, isLoading }: TaskProps) => {
     if (isLoading || isUpdating) return;
 
     editTask.setTask(todo);
+    if (isPreview) editTask.showPreview();
     editTask.onOpen();
   };
 
   const toggleChecked = () => {
+    if (isPreview) return;
+
     executeTodoUpdate({
       todo: {
         id: todo.id,
@@ -66,7 +75,7 @@ export const Task = ({ todo, index, isLoading }: TaskProps) => {
     <Draggable
       draggableId={todo.id}
       index={index}
-      isDragDisabled={isLoading || isUpdating}
+      isDragDisabled={isLoading || isUpdating || isPreview}
     >
       {(provided) => (
         <li
@@ -76,10 +85,13 @@ export const Task = ({ todo, index, isLoading }: TaskProps) => {
           className={cn(
             "flex space-x-2 items-center p-3 dark:bg-gray-800 bg-gray-100 hover:bg-gray-200 rounded-md select-none shadow transition dark:hover:bg-gray-700",
             checked && "opacity-50 hover:opacity-60",
-            editTask.task.id === todo.id && "dark:bg-gray-700 bg-gray-200"
+            editTask.task.id === todo.id && "dark:bg-gray-700 bg-gray-200",
+            isPreview && "cursor-default"
           )}
         >
-          <GripVertical className="h-5 w-5 opacity-80 hover:opacity-100 transition" />
+          {!isPreview && (
+            <GripVertical className="h-5 w-5 opacity-80 hover:opacity-100 transition" />
+          )}
           <Hint
             description={checked ? "Mark as pending" : "Mark as complete"}
             side="right"
@@ -89,8 +101,8 @@ export const Task = ({ todo, index, isLoading }: TaskProps) => {
               className="h-5 w-5"
               checked={checked}
               onCheckedChange={toggleChecked}
-              disabled={isUpdating}
-              aria-disabled={isUpdating}
+              disabled={isUpdating || isPreview}
+              aria-disabled={isUpdating || isPreview}
             />
           </Hint>
           <div
